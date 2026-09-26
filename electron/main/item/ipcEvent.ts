@@ -205,14 +205,22 @@ export default function () {
           const targetWindow = type === "quickSearch" ? global.quickSearchWindow : global.mainWindow;
           if (!targetWindow || targetWindow.isDestroyed()) return;
           sendToWebContent(windowName, "onItemExplorerMenu", { type, id: item.id });
+          let displayed = false;
           global.addon.disableMouseHook();
-          const displayed = global.addon.explorerContextMenu(
-            targetWindow.getNativeWindowHandle().readInt32LE(0),
-            nativePath,
-            point[0],
-            point[1]
-          );
-          global.addon.enableMouseHook();
+          try {
+            displayed = global.addon.explorerContextMenu(
+              targetWindow.getNativeWindowHandle().readInt32LE(0),
+              nativePath,
+              point[0],
+              point[1]
+            );
+          } catch (error) {
+            // A stale desktop entry or an Explorer failure should not prevent
+            // the regular application context menu from being shown.
+            console.warn("[item] Unable to show Explorer context menu:", error);
+          } finally {
+            global.addon.enableMouseHook();
+          }
           if (displayed) {
             sendToWebContent(windowName, "onItemRightMenuClose", {});
             return;

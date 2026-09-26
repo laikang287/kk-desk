@@ -21,7 +21,11 @@ import {
 } from "../commons/index";
 import { deleteByClassificationId, list as listItems } from "../item/data";
 import { newClassificationData } from "../../../commons/utils/common";
-import { startDesktopAssociation, stopDesktopAssociation } from "../item/desktop";
+import {
+  refreshDesktopAssociation,
+  startDesktopAssociation,
+  stopDesktopAssociation,
+} from "../item/desktop";
 
 // 窗口
 let classificationAddEditWindow: BrowserWindow | null = null;
@@ -840,10 +844,50 @@ function getItemShowOnly(classification: Classification) {
       },
     }),
   ];
+  if (classification.type === 3) {
+    submenus.push(
+      new MenuItem({ type: "separator" }),
+      new MenuItem({
+        label: global.language.showHiddenFiles,
+        type: "checkbox",
+        checked: classification.data.showHiddenFiles,
+        click: (menuItem) =>
+          updateDesktopVisibility(
+            classification,
+            "showHiddenFiles",
+            menuItem.checked
+          ),
+      }),
+      new MenuItem({
+        label: global.language.showTemporaryFiles,
+        type: "checkbox",
+        checked: classification.data.showTemporaryFiles,
+        click: (menuItem) =>
+          updateDesktopVisibility(
+            classification,
+            "showTemporaryFiles",
+            menuItem.checked
+          ),
+      })
+    );
+  }
   return new MenuItem({
     label: global.language.show,
     submenu: submenus,
   });
+}
+
+function updateDesktopVisibility(
+  classification: Classification,
+  key: "showHiddenFiles" | "showTemporaryFiles",
+  checked: boolean
+) {
+  const current = selectById(classification.id);
+  if (!current || current.type !== 3) return;
+  current.data[key] = checked;
+  if (updateData(current.id, current.data)) {
+    refreshDesktopAssociation(current.id);
+  }
 }
 
 /**

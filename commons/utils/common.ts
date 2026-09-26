@@ -119,6 +119,8 @@ function newClassificationData({
   aggregateItemCount = 50,
   excludeSearch = false,
   desktopUncategorized = false,
+  showHiddenFiles = false,
+  showTemporaryFiles = false,
 }: {
   icon?: string | null;
   associateFolderPath?: string | null;
@@ -132,6 +134,8 @@ function newClassificationData({
   aggregateItemCount?: number | null;
   excludeSearch?: boolean | null;
   desktopUncategorized?: boolean | null;
+  showHiddenFiles?: boolean | null;
+  showTemporaryFiles?: boolean | null;
 }): ClassificationData {
   return {
     icon: icon ?? null,
@@ -146,6 +150,8 @@ function newClassificationData({
     aggregateItemCount: aggregateItemCount ?? 50,
     excludeSearch: excludeSearch ?? false,
     desktopUncategorized: desktopUncategorized ?? false,
+    showHiddenFiles: showHiddenFiles ?? false,
+    showTemporaryFiles: showTemporaryFiles ?? false,
   };
 }
 

@@ -358,7 +358,7 @@ function createTray(show: boolean) {
     // 菜单
     let contextMenu = Menu.buildFromTemplate([
       {
-        label: global.language.displayMainWindow,
+        label: global.language.displayMainInterface,
         click: function () {
           showMainWindowBefore(true);
         },

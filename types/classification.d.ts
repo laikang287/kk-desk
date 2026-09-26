@@ -46,4 +46,8 @@ export interface ClassificationData {
   excludeSearch: boolean;
   // 是否是桌面关联的自动“未分类”子分类
   desktopUncategorized: boolean;
+  // 关联桌面是否显示隐藏文件
+  showHiddenFiles: boolean;
+  // 关联桌面是否显示临时文件
+  showTemporaryFiles: boolean;
 }
