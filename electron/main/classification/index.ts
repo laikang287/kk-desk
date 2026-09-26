@@ -19,7 +19,9 @@ import {
   getMainBackgorunColor,
   sendToWebContent,
 } from "../commons/index";
-import { deleteByClassificationId } from "../item/data";
+import { deleteByClassificationId, list as listItems } from "../item/data";
+import { newClassificationData } from "../../../commons/utils/common";
+import { startDesktopAssociation, stopDesktopAssociation } from "../item/desktop";
 
 // 窗口
 let classificationAddEditWindow: BrowserWindow | null = null;
@@ -38,7 +40,7 @@ function createAddEditWindow(id: number | null, parentId: number | null) {
   // 创建窗口
   classificationAddEditWindow = global.classificationAddEditWindow =
     new BrowserWindow({
-      title: "Dawn Launcher",
+      title: "kk Dawn Launcher",
       frame: false,
       parent: global.mainWindow,
       height: 174,
@@ -106,7 +108,7 @@ function createSetIconWindow(id: number) {
   // 创建窗口
   classificationSetIconWindow = global.classificationSetIconWindow =
     new BrowserWindow({
-      title: "Dawn Launcher",
+      title: "kk Dawn Launcher",
       frame: false,
       parent: global.mainWindow,
       height: 500,
@@ -169,7 +171,7 @@ function createAssociateFolderWindow(id: number) {
   // 创建窗口
   classificationAssociateFolderWindow =
     global.classificationAssociateFolderWindow = new BrowserWindow({
-      title: "Dawn Launcher",
+      title: "kk Dawn Launcher",
       frame: false,
       parent: global.mainWindow,
       height: 249,
@@ -237,7 +239,7 @@ function createAggregateWindow(id: number) {
   // 创建窗口
   classificationAggregateWindow = global.classificationAggregateWindow =
     new BrowserWindow({
-      title: "Dawn Launcher",
+      title: "kk Dawn Launcher",
       frame: false,
       parent: global.mainWindow,
       height: 144,
@@ -945,6 +947,45 @@ function updateExcludeSearch(id: number, value: boolean) {
   }
 }
 
+/** 启用或取消桌面关联 */
+function setAssociateDesktop(id: number, enabled: boolean) {
+  const classification = selectById(id);
+  if (!classification || classification.parentId) return null;
+  if (enabled) {
+    if (classification.type !== 0 || hasChildClassification(id)) return null;
+    const itemIds = listItems(false, id).map((item) => item.id);
+    deleteByClassificationId(id);
+    classification.type = 3;
+    classification.data.associateFolderPath = null;
+    classification.data.associateFolderHiddenItems = null;
+    if (!update(classification)) return null;
+    const uncategorized = add(
+      id,
+      global.language.uncategorized,
+      null,
+      false,
+      newClassificationData({ desktopUncategorized: true })
+    );
+    if (!uncategorized) return null;
+    if (itemIds.length) sendToWebContent("mainWindow", "onDeleteItem", itemIds);
+    startDesktopAssociation(id);
+    return { classification, child: uncategorized };
+  }
+  if (classification.type !== 3) return null;
+  stopDesktopAssociation(id);
+  classification.type = 0;
+  if (!update(classification)) return null;
+  const updatedChildren = [];
+  for (const child of list(id)) {
+    if (child.data.desktopUncategorized) {
+      child.data.desktopUncategorized = false;
+      update(child);
+      updatedChildren.push(child);
+    }
+  }
+  return { classification, child: null, updatedChildren };
+}
+
 export {
   createAddEditWindow,
   createSetIconWindow,
@@ -963,4 +1004,5 @@ export {
   updateItemOpenNumberSortToDefualt,
   updateAggregate,
   updateExcludeSearch,
+  setAssociateDesktop,
 };

@@ -1,4 +1,5 @@
 import { deleteAssociateFolderWatcher } from ".";
+import { stopDesktopAssociation } from "../item/desktop";
 import {
   Classification,
   ClassificationData,
@@ -7,8 +8,9 @@ import {
   newClassification,
   newClassificationData,
 } from "../../../commons/utils/common";
-import { deleteByClassificationId, updateClassificationId } from "../item/data";
+import { deleteByClassificationId, list as listItems, updateClassificationId, updateOrder as updateItemOrder } from "../item/data";
 import { getDataSqlite3 } from "../../commons/betterSqlite3";
+import { sendToWebContent } from "../commons";
 
 // 获取数据库
 let db = getDataSqlite3();
@@ -195,16 +197,38 @@ function selectById(id: number): Classification | null {
  * @param id
  */
 function del(id: number) {
+  let movedDesktopItemIds: number[] = [];
   // 查询数据
   let classifictaion = selectById(id);
   if (classifictaion) {
     // 查询有无子分类
     let childList = list(classifictaion.id);
+    let desktopUncategorized = null as Classification | null;
+    if (classifictaion.parentId) {
+      const parent = selectById(classifictaion.parentId);
+      if (parent?.type === 3) {
+        desktopUncategorized = childList.find((child) => child.data.desktopUncategorized) ?? null;
+      }
+    }
+    if (desktopUncategorized && !classifictaion.data.desktopUncategorized) {
+      const desktopItems = listItems(false, classifictaion.id).filter((item) => item.data.desktopKey);
+      if (desktopItems.length) {
+        movedDesktopItemIds = desktopItems.map((item) => item.id);
+        updateItemOrder(movedDesktopItemIds, desktopUncategorized.id, null);
+      }
+    }
     // SQL
     let sql = `DELETE FROM ${tableName} WHERE id = ? or parent_id = ?`;
     // 运行
     let res = db.prepare(sql).run(id, id).changes > 0;
     if (res) {
+      if (movedDesktopItemIds.length) {
+        sendToWebContent("mainWindow", "onMoveItem", {
+          idList: movedDesktopItemIds,
+          toClassificationId: desktopUncategorized!.id,
+        });
+      }
+      if (classifictaion.type === 3) stopDesktopAssociation(classifictaion.id);
       // 更新序号
       reorder(classifictaion.parentId);
       // 删除分类下所有项目

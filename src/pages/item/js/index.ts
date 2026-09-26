@@ -139,6 +139,9 @@ function getShowItemListByClassificationId(classificationId: number | null) {
  */
 function addItem(item: Item) {
   let itemList = getItemListByClassificationId(item.classificationId);
+  if (itemList.some((existing) => existing.id === item.id)) {
+    return;
+  }
   itemList.push(item);
   // 重新排序
   itemList.sort((a, b) => a.order! - b.order!);
@@ -311,15 +314,25 @@ function moveItemByClassificationId(
   oldClassificationId: number,
   newClassificationId: number,
 ) {
-  if (store.itemMap.has(oldClassificationId)) {
+  const oldItemList = store.itemMap.get(oldClassificationId) ?? [];
+  const newItemList = store.itemMap.get(newClassificationId) ?? [];
+  if (oldItemList.length) {
+    // An item event may populate the new child before the classification event
+    // arrives (desktop association does exactly this). Merge instead of
+    // replacing the child list so those freshly synchronized items survive.
+    const itemById = new Map<number, Item>();
+    for (const item of [...newItemList, ...oldItemList]) {
+      item.classificationId = newClassificationId;
+      itemById.set(item.id, item);
+    }
     store.itemMap.set(
       newClassificationId,
-      store.itemMap.get(oldClassificationId)!,
+      Array.from(itemById.values()).sort((a, b) => a.order! - b.order!),
     );
-    deleteItemByClassificationId(oldClassificationId);
-  } else {
+  } else if (!store.itemMap.has(newClassificationId)) {
     store.itemMap.set(newClassificationId, []);
   }
+  deleteItemByClassificationId(oldClassificationId);
 }
 
 /**

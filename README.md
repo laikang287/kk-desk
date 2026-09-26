@@ -1,6 +1,6 @@
 # 简体中文 | [English](https://github.com/fanchenio/DawnLauncher/blob/main/README-ENGLISH.md)
 
-# Dawn Launcher
+# kk Dawn Launcher
 
 `Windows`快捷启动工具，帮助您整理杂乱无章的桌面，分门别类管理您的桌面快捷方式，让您的桌面保持干净整洁。
 

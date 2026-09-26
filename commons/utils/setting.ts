@@ -108,7 +108,7 @@ function getAppearance({
   fontShadow = false,
   fontShadowColor = "#000000",
   windowRounded = false,
-  title = "Dawn Launcher",
+  title = "kk Dawn Launcher",
 }: {
   theme?: Theme | null;
   transparency?: number | null;
@@ -131,7 +131,7 @@ function getAppearance({
     fontShadow: fontShadow ?? false,
     fontShadowColor: fontShadowColor ?? "#000000",
     windowRounded: windowRounded ?? false,
-    title: title ?? "Dawn Launcher",
+    title: title ?? "kk Dawn Launcher",
   };
 }
 
@@ -225,6 +225,7 @@ function getItem({
   fontWeight = 400,
   fontLineHeight = 1.25,
   promptShowPath = false,
+  contextMenuMode = "desktop",
 }: {
   layout?: string | null;
   iconSize?: number | null;
@@ -242,6 +243,7 @@ function getItem({
   fontWeight?: number | null;
   fontLineHeight?: number | null;
   promptShowPath?: boolean | null;
+  contextMenuMode?: "desktop" | "dawn" | null;
 }): Item {
   return {
     layout: layout ?? "tile",
@@ -260,6 +262,7 @@ function getItem({
     fontWeight: fontWeight ?? 400,
     fontLineHeight: fontLineHeight ?? 1.25,
     promptShowPath: promptShowPath ?? false,
+    contextMenuMode: contextMenuMode ?? "desktop",
   };
 }
 

@@ -26,7 +26,7 @@ use windows::{
                 MONITOR_DEFAULTTONEAREST,
             },
         },
-        Storage::FileSystem::SearchPathW,
+        Storage::FileSystem::{GetFileAttributesW, SearchPathW, FILE_ATTRIBUTE_HIDDEN, FILE_ATTRIBUTE_SYSTEM, INVALID_FILE_ATTRIBUTES},
         System::{
             Com::{
                 CoCreateInstance, CoInitializeEx, CoUninitialize, IPersistFile,
@@ -58,6 +58,14 @@ use windows::{
         },
     },
 };
+
+/// Return whether a filesystem entry is hidden from the Windows desktop view.
+pub fn is_hidden_or_system_file(path: &str) -> bool {
+    let path = HSTRING::from(path);
+    let attributes = unsafe { GetFileAttributesW(PCWSTR(path.as_ptr())) };
+    attributes == INVALID_FILE_ATTRIBUTES
+        || attributes & (FILE_ATTRIBUTE_HIDDEN.0 | FILE_ATTRIBUTE_SYSTEM.0) != 0
+}
 use windows::{
     Management::Deployment::PackageManager,
     Win32::{
@@ -254,7 +262,7 @@ pub fn open_file_location(path: &str) {
 /**
  * 资源管理器菜单
  */
-pub fn explorer_context_menu(window: i32, path: &str, x: i32, y: i32) {
+pub fn explorer_context_menu(window: i32, path: &str, x: i32, y: i32) -> bool {
     // IShellItem
     let path = HSTRING::from(path);
     if let Ok(shell_item) =
@@ -288,10 +296,12 @@ pub fn explorer_context_menu(window: i32, path: &str, x: i32, y: i32) {
                         info.nShow = SW_NORMAL.0 as i32;
                         let _ = unsafe { context_menu.InvokeCommand(&info) };
                     }
+                    return true;
                 }
             }
         }
     }
+    false
 }
 
 /**

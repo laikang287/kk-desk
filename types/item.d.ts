@@ -70,4 +70,8 @@ export interface ItemData {
   quickSearchLastOpen: number;
   // 多项目时间间隔(毫秒)
   multiItemsTimeInterval: number;
+  // 桌面同步对象的稳定标识
+  desktopKey: string | null;
+  // 桌面对象本身的路径（快捷方式保留 .lnk 路径）
+  desktopSourcePath: string | null;
 }

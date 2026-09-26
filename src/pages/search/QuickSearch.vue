@@ -374,7 +374,7 @@ function runItem(item: Item) {
 }
 // 获取placeholder
 function getPlaceholder() {
-  let text = "Dawn Launcher";
+  let text = "kk Dawn Launcher";
   if (
     mode.value === "webSearch" &&
     webSearchSource.value &&

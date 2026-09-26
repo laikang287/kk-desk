@@ -6,7 +6,7 @@ export interface Classification {
   parentId: number | null;
   // 名称
   name: string | null;
-  // 类型 0:普通分类 1:关联文件夹 2:聚合分类
+  // 类型 0:普通分类 1:关联文件夹 2:聚合分类 3:关联桌面
   type: number;
   // 数据
   data: ClassificationData;
@@ -44,4 +44,6 @@ export interface ClassificationData {
   aggregateItemCount: number;
   // 排除搜索
   excludeSearch: boolean;
+  // 是否是桌面关联的自动“未分类”子分类
+  desktopUncategorized: boolean;
 }

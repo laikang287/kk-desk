@@ -914,6 +914,9 @@ onMounted(() => {
       store.invalidItemIdList = data;
     }),
   );
+  // Re-read after listeners are installed so items synchronized during page
+  // initialization cannot be missed if their add event arrived too early.
+  getItemList();
 });
 // unmounted
 onUnmounted(() => {

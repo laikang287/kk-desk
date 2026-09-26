@@ -51,7 +51,7 @@ async function createAddEditWindow(
   closeWindow(itemAddEditWindow);
   // 创建窗口
   itemAddEditWindow = global.itemAddEditWindow = new BrowserWindow({
-    title: "Dawn Launcher",
+    title: "kk Dawn Launcher",
     frame: false,
     parent: global.mainWindow,
     height: 500,
@@ -115,7 +115,7 @@ async function createNetworkIconWindow() {
   closeWindow(itemNetworkIconWindow);
   // 创建窗口
   itemNetworkIconWindow = global.itemNetworkIconWindow = new BrowserWindow({
-    title: "Dawn Launcher",
+    title: "kk Dawn Launcher",
     frame: false,
     parent: global.itemAddEditWindow,
     height: 230,
@@ -170,7 +170,7 @@ async function createSVGIconWindow() {
   closeWindow(itemSVGIconWindow);
   // 创建窗口
   itemSVGIconWindow = global.itemSVGIconWindow = new BrowserWindow({
-    title: "Dawn Launcher",
+    title: "kk Dawn Launcher",
     frame: false,
     parent: global.itemAddEditWindow,
     height: 230,

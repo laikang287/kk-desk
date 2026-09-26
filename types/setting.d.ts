@@ -158,6 +158,8 @@ export interface Item {
   fontLineHeight: number;
   // 提示：显示路径
   promptShowPath: boolean;
+  // 右键菜单模式 desktop: Windows 桌面菜单 dawn: 原应用菜单
+  contextMenuMode: "desktop" | "dawn";
 }
 
 // 快速搜索

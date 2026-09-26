@@ -118,6 +118,7 @@ function newClassificationData({
   fixed = false,
   aggregateItemCount = 50,
   excludeSearch = false,
+  desktopUncategorized = false,
 }: {
   icon?: string | null;
   associateFolderPath?: string | null;
@@ -130,6 +131,7 @@ function newClassificationData({
   fixed?: boolean | null;
   aggregateItemCount?: number | null;
   excludeSearch?: boolean | null;
+  desktopUncategorized?: boolean | null;
 }): ClassificationData {
   return {
     icon: icon ?? null,
@@ -143,6 +145,7 @@ function newClassificationData({
     fixed: fixed ?? false,
     aggregateItemCount: aggregateItemCount ?? 50,
     excludeSearch: excludeSearch ?? false,
+    desktopUncategorized: desktopUncategorized ?? false,
   };
 }
 
@@ -245,6 +248,8 @@ function newItemData({
   lastOpen = 0,
   quickSearchLastOpen = 0,
   multiItemsTimeInterval = 0,
+  desktopKey = null,
+  desktopSourcePath = null,
 }: {
   startLocation?: string | null;
   target?: string | null;
@@ -259,6 +264,8 @@ function newItemData({
   lastOpen?: number | null;
   quickSearchLastOpen?: number | null;
   multiItemsTimeInterval?: number | null;
+  desktopKey?: string | null;
+  desktopSourcePath?: string | null;
 }): ItemData {
   return {
     startLocation: startLocation ?? null,
@@ -274,6 +281,8 @@ function newItemData({
     lastOpen: lastOpen ?? 0,
     quickSearchLastOpen: quickSearchLastOpen ?? 0,
     multiItemsTimeInterval: multiItemsTimeInterval ?? 0,
+    desktopKey: desktopKey ?? null,
+    desktopSourcePath: desktopSourcePath ?? null,
   };
 }
 

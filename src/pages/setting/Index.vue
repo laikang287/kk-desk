@@ -879,6 +879,16 @@
           </div>
           <div class="mx-2" v-if="selectedMenuId === 4">
             <NForm label-placement="left" :show-feedback="false" size="small">
+              <span class="block font-semibold">{{ store.language.functions }}</span>
+              <NFormItem :label="store.language.contextMenuMode" class="mt-1">
+                <NSelect
+                  v-model:value="setting.item.contextMenuMode"
+                  :options="contextMenuModeOptions"
+                  size="small"
+                ></NSelect>
+              </NFormItem>
+            </NForm>
+            <NForm label-placement="left" :show-feedback="false" size="small">
               <span class="block font-semibold">{{
                 store.language.layout
               }}</span>
@@ -1602,6 +1612,10 @@ function createSimpleBar() {
 }
 // setting
 let setting = ref<Setting>(convert(store.setting));
+let contextMenuModeOptions: Array<{ label: string; value: "desktop" | "dawn" }> = [
+  { label: store.language.desktopContextMenu, value: "desktop" },
+  { label: store.language.dawnContextMenu, value: "dawn" },
+];
 // 背景图
 if (setting.value.appearance.backgroundImage) {
   window.setting.getBackgroundImage(

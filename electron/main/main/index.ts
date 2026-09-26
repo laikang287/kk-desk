@@ -33,7 +33,7 @@ function createMainWindow() {
   }
   // 创建窗口
   mainWindow = global.mainWindow = new BrowserWindow({
-    title: "Dawn Launcher",
+    title: "kk Dawn Launcher",
     width: 800,
     height: 600,
     frame: false,
@@ -376,7 +376,7 @@ function createTray(show: boolean) {
         },
       },
     ]);
-    global.tray.setToolTip("Dawn Launcher");
+    global.tray.setToolTip("kk Dawn Launcher");
     global.tray.setContextMenu(contextMenu);
     // 点击托盘
     global.tray.on("click", () => {

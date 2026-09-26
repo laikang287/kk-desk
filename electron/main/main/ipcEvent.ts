@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import { createTray, hideMainWindow, showMainWindow } from "./index";
 import { initAssociateFolder } from "../classification";
+import { initDesktopAssociations } from "../item/desktop";
 import { checkInvalid } from "../item";
 import { getWindow } from "../commons";
 
@@ -28,6 +29,7 @@ export default function () {
   ipcMain.on("mainWindowInitData", () => {
     // 初始化关联文件夹
     initAssociateFolder();
+    initDesktopAssociations();
     // 检测无效项目
     if (global.setting.item.checkInvalidItem) {
       // 五分钟检测一次

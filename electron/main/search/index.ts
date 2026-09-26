@@ -17,7 +17,7 @@ function createQuickSearchWindow() {
   // 创建窗口
   global.quickSearchWindowInit = false;
   quickSearchWindow = global.quickSearchWindow = new BrowserWindow({
-    title: "Dawn Launcher",
+    title: "kk Dawn Launcher",
     width: global.setting.quickSearch.width,
     height: 44,
     type: "toolbar",

@@ -14,6 +14,7 @@ import {
   createAggregateWindow,
   updateAggregate,
   updateExcludeSearch,
+  setAssociateDesktop,
 } from "./index";
 import {
   add,
@@ -117,7 +118,7 @@ export default function () {
         })
       );
     } else {
-      if (!classification.parentId && classification.type === 0) {
+      if (!classification.parentId && (classification.type === 0 || classification.type === 3)) {
         menuList.push(
           new MenuItem({
             label: global.language.newSubclassification,
@@ -145,7 +146,7 @@ export default function () {
           },
         })
       );
-      if (classification.type === 0 || classification.type === 1) {
+      if (classification.type === 0 || classification.type === 1 || classification.type === 3) {
         menuList.push(
           new MenuItem({
             label: global.language.excludeSearch,
@@ -206,6 +207,27 @@ export default function () {
             })
           );
         }
+        if (!classification.parentId && classification.type === 0) {
+          menuList.push(
+            new MenuItem({
+              label: global.language.associateDesktop,
+              click: () => {
+                const result = showMessageBoxSync(
+                  "mainWindow",
+                  global.language.associateDesktopPrompt,
+                  "question",
+                  [global.language.ok, global.language.cancel]
+                );
+                if (result !== 0) return;
+                const associated = setAssociateDesktop(classification.id, true);
+                if (associated) {
+                  sendToWebContent("mainWindow", "onUpdateClassification", associated.classification);
+                  sendToWebContent("mainWindow", "onAddClassification", associated.child);
+                }
+              },
+            })
+          );
+        }
         if (classification.type === 0 || classification.type === 2) {
           menuList.push(
             new MenuItem({
@@ -217,6 +239,29 @@ export default function () {
             })
           );
         }
+      }
+      if (!classification.parentId && classification.type === 3) {
+        menuList.push(
+          new MenuItem({
+            label: global.language.unlinkDesktop,
+            click: () => {
+              const result = showMessageBoxSync(
+                "mainWindow",
+                global.language.removeDesktopAssociationPrompt,
+                "question",
+                [global.language.ok, global.language.cancel]
+              );
+              if (result !== 0) return;
+              const unlinked = setAssociateDesktop(classification.id, false);
+              if (unlinked) {
+                sendToWebContent("mainWindow", "onUpdateClassification", unlinked.classification);
+                for (const child of unlinked.updatedChildren ?? []) {
+                  sendToWebContent("mainWindow", "onUpdateClassification", child);
+                }
+              }
+            },
+          })
+        );
       }
       // 分割线
       menuList.push(new MenuItem({ type: "separator" }));
@@ -250,7 +295,7 @@ export default function () {
             createAddEditWindow(classification.id, null);
           },
         }),
-        new MenuItem({
+        ...(classification.data.desktopUncategorized ? [] : [new MenuItem({
           label: global.language.delete,
           click: () => {
             let res = showMessageBoxSync(
@@ -273,7 +318,7 @@ export default function () {
               }
             }
           },
-        })
+        })])
       );
     }
     // 载入菜单

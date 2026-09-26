@@ -14,6 +14,15 @@ fn get_file_icon(path: String) -> Option<String> {
 }
 
 /**
+ * 检查桌面文件是否应由 Explorer 隐藏
+ */
+#[allow(dead_code)]
+#[napi]
+fn is_hidden_or_system_file(path: String) -> bool {
+    windows::is_hidden_or_system_file(&path)
+}
+
+/**
  * 搜索路径
  */
 #[allow(dead_code)]
@@ -45,7 +54,7 @@ fn open_file_location(path: String) {
  */
 #[allow(dead_code)]
 #[napi]
-fn explorer_context_menu(window: i32, path: String, x: i32, y: i32) {
+fn explorer_context_menu(window: i32, path: String, x: i32, y: i32) -> bool {
     windows::explorer_context_menu(window, &path, x, y)
 }
 

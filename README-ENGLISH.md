@@ -1,6 +1,6 @@
 # [简体中文](https://github.com/fanchenio/DawnLauncher) | English
 
-# Dawn Launcher
+# kk Dawn Launcher
 
 The `Windows` quick launch tool helps you organize your messy desktop, manage your desktop shortcuts by category, and keep your desktop clean and tidy.
 

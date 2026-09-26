@@ -32,7 +32,7 @@
         class="w-20 h-20 mx-auto block"
         draggable="false"
       />
-      <p class="mt-4">Dawn Launcher {{ version }}</p>
+      <p class="mt-4">kk Dawn Launcher {{ version }}</p>
       <p class="mt-2">
         Copyright © 2022-2026 Dawn Launcher. All Rights Reserved
       </p>

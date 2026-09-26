@@ -13,7 +13,7 @@ function createWindow() {
   closeWindow(aboutWindow);
   // 创建窗口
   aboutWindow = global.aboutWindow = new BrowserWindow({
-    title: "Dawn Launcher",
+    title: "kk Dawn Launcher",
     frame: false,
     parent: global.mainWindow,
     height: 212,

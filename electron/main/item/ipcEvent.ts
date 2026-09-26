@@ -194,6 +194,31 @@ export default function () {
         if (!pageClassification && type === "main") {
           return;
         }
+        if (
+          (type === "main" || type === "search" || type === "quickSearch") &&
+          global.setting.item.contextMenuMode === "desktop" &&
+          (item.type === 0 || item.type === 1 || (item.type === 3 && item.data.target?.startsWith("shell:")))
+        ) {
+          const nativePath = item.data.desktopSourcePath ||
+            (item.type === 0 || item.type === 1 ? parsePath(item.data.target) : item.data.target || "");
+          const windowName = type === "quickSearch" ? "quickSearchWindow" : "mainWindow";
+          const targetWindow = type === "quickSearch" ? global.quickSearchWindow : global.mainWindow;
+          if (!targetWindow || targetWindow.isDestroyed()) return;
+          sendToWebContent(windowName, "onItemExplorerMenu", { type, id: item.id });
+          global.addon.disableMouseHook();
+          const displayed = global.addon.explorerContextMenu(
+            targetWindow.getNativeWindowHandle().readInt32LE(0),
+            nativePath,
+            point[0],
+            point[1]
+          );
+          global.addon.enableMouseHook();
+          if (displayed) {
+            sendToWebContent(windowName, "onItemRightMenuClose", {});
+            return;
+          }
+          sendToWebContent(windowName, "onItemRightMenuClose", {});
+        }
         // 后缀
         let ext: string | null = null;
         // 排除

@@ -22,6 +22,7 @@ import aboutIpcEvent from "./about/ipcEvent";
 import dataIpcEvent from "./data/ipcEvent";
 
 // 数据存储目录
+app.setName("kk Dawn Launcher");
 if (
   process.env.NODE_ENV !== "development" &&
   import.meta.env.VITE_INSTALL === "false"
@@ -49,7 +50,7 @@ if (global.setting.appearance.transparency === 1) {
 }
 
 // Set application name for Windows 10+ notifications
-if (process.platform === "win32") app.setAppUserModelId(app.getName());
+if (process.platform === "win32") app.setAppUserModelId("com.kkdawnlauncher.application");
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -138,7 +139,7 @@ app.whenReady().then(() => {
     } else {
       dialog.showMessageBoxSync({
         type: "error",
-        title: "Dawn Launcher",
+        title: "kk Dawn Launcher",
         message: e.stack,
       });
       app.quit();
@@ -150,7 +151,7 @@ app.whenReady().then(() => {
 process.on("uncaughtException", (err) => {
   dialog.showMessageBoxSync({
     type: "error",
-    title: "Dawn Launcher",
+    title: "kk Dawn Launcher",
     message: err.stack,
   });
   // 关闭所有子进程
