@@ -103,8 +103,8 @@ app.whenReady().then(() => {
       }
     }
     // 初始化数据
-    classificationDataInit();
     itemDataInit();
+    classificationDataInit();
     initSystemItem();
     // 初始化监听
     indexIpcEvent();

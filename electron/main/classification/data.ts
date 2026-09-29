@@ -59,8 +59,17 @@ function init() {
   let row: any = db.prepare(sql).get();
   let count = row.count as number;
   if (count === 0) {
-    // 新增分类
-    add(null, global.language.newClassificationName, null, false);
+    // 默认创建关联桌面分类及其默认子分类
+    const desktop = add(null, global.language.desktopClassification, null, false, newClassificationData({}), 3);
+    if (desktop) {
+      add(
+        desktop.id,
+        global.language.defaultClassification,
+        null,
+        false,
+        newClassificationData({ desktopUncategorized: true })
+      );
+    }
   }
 }
 

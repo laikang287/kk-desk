@@ -1005,7 +1005,7 @@ function setAssociateDesktop(id: number, enabled: boolean) {
     if (!update(classification)) return null;
     const uncategorized = add(
       id,
-      global.language.uncategorized,
+      global.language.defaultClassification,
       null,
       false,
       newClassificationData({ desktopUncategorized: true })
