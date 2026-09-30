@@ -83,6 +83,27 @@ export default defineConfig(({ command }) => {
             plugins: [isServe && notBundle()],
           },
         },
+        {
+          entry: "electron/main/desktopWorker.ts",
+          onstart({ reload }) {
+            reload();
+          },
+          vite: {
+            build: {
+              sourcemap: sourcemap ? "inline" : undefined,
+              minify: isBuild,
+              outDir: "dist-electron/main",
+              emptyOutDir: false,
+              commonjsOptions: {
+                ignoreDynamicRequires: true,
+              },
+              rollupOptions: {
+                external: [],
+              },
+            },
+            plugins: [isServe && notBundle()],
+          },
+        },
       ]),
       bindingSqlite3(),
     ],

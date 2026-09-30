@@ -22,6 +22,7 @@ import {
 } from "../../../commons/utils/common";
 import { iconExts } from "../../commons/utils";
 import { addAssociateFolderWatcher } from "../classification";
+import { queueDesktopItemToOS } from "./desktop";
 import {
   closeWindow,
   convertPath,
@@ -227,9 +228,14 @@ function copy(idList: Array<number>, toClassificationId: number) {
   let itemList = selectByIdList(false, idList);
   if (itemList.length > 0) {
     // 清空打开信息
-    itemList.forEach((item) => clearOpenInfo(item));
+    itemList.forEach((item) => {
+      clearOpenInfo(item);
+      item.data.desktopKey = null;
+      item.data.desktopSourcePath = null;
+    });
     // 批量添加
     resultList = batchAdd(toClassificationId, itemList);
+    for (const item of resultList) queueDesktopItemToOS(item);
   }
   if (resultList.length > 0) {
     // 通知前端
@@ -250,6 +256,7 @@ function move(idList: Array<number>, toClassificationId: number) {
   // 移动项目
   let res = updateOrder(idList, toClassificationId, null);
   if (res) {
+    for (const item of selectByIdList(false, idList)) queueDesktopItemToOS(item);
     // 通知前端
     sendToWebContent("mainWindow", "onMoveItem", {
       idList,
@@ -268,6 +275,7 @@ async function drop(classificationId: number, pathList: Array<string>) {
   let resultList = await getDropItemInfo(classificationId, pathList);
   // 添加项目
   let itemList = batchAdd(classificationId, resultList);
+  for (const item of itemList) queueDesktopItemToOS(item);
   // 发送消息到页面
   sendToWebContent("mainWindow", "onAddItem", {
     itemList,

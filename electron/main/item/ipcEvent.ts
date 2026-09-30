@@ -39,7 +39,7 @@ import {
   updateOrder,
 } from "./data";
 import { Item } from "../../../types/item";
-import { refreshDesktopAssociation } from "./desktop";
+import { queueDesktopItemToOS, refreshDesktopAssociation, trashDesktopItem } from "./desktop";
 import { getFileExtname, isAbsolutePath } from "../../../commons/utils/common";
 import {
   list as selectClassificationList,
@@ -144,12 +144,15 @@ export default function () {
   // 添加项目
   ipcMain.on("addItem", (event, args) => {
     let item = add(args);
+    if (item) queueDesktopItemToOS(item);
     setShortcutKey();
     event.returnValue = item;
   });
   // 更新项目
   ipcMain.on("updateItem", (event, args) => {
+    const previousItem = selectById(args.id);
     let res = update(args);
+    if (res) queueDesktopItemToOS(args, previousItem);
     setShortcutKey();
     event.returnValue = res;
   });
@@ -469,7 +472,7 @@ export default function () {
             }),
             new MenuItem({
               label: global.language.delete,
-              click: () => {
+              click: async () => {
                 let res = showMessageBoxSync(
                   "mainWindow",
                   global.language.deleteItemPrompt,
@@ -477,12 +480,25 @@ export default function () {
                   [global.language.ok, global.language.cancel]
                 );
                 if (res === 0) {
+                  const deletedItem = selectById(item.id);
+                  if (!deletedItem) return;
                   // 删除数据
                   del(item.id);
                   // 快捷键
                   setShortcutKey();
                   // 通知前端删除数据
                   sendToWebContent("mainWindow", "onDeleteItem", [item.id]);
+                  if (deletedItem.data.desktopKey) {
+                    try {
+                      const trashed = await trashDesktopItem(deletedItem);
+                      if (!trashed) throw new Error("The linked desktop entry cannot be moved to Recycle Bin");
+                    } catch (error) {
+                      console.error(`[desktop] Unable to move item ${item.id} to Recycle Bin:`, error);
+                      const restored = add(deletedItem, true);
+                      if (restored) sendToWebContent("mainWindow", "onAddItem", { itemList: [restored], clear: false, classificationId: null });
+                      setShortcutKey();
+                    }
+                  }
                 }
               },
             })
@@ -616,7 +632,7 @@ export default function () {
           new MenuItem({ type: "separator" }),
           new MenuItem({
             label: global.language.batchDelete,
-            click: () => {
+            click: async () => {
               let res = showMessageBoxSync(
                 "mainWindow",
                 global.language.batchDeletePrompt,
@@ -624,16 +640,31 @@ export default function () {
                 [global.language.ok, global.language.cancel]
               );
               if (res === 0) {
+                const deletedItems: Item[] = [];
+                for (const id of batchSelectedIdList) {
+                  const item = selectById(id);
+                  if (!item) continue;
+                  deletedItems.push(item);
+                }
                 // 批量删除
-                batchDel(batchSelectedIdList);
+                const deletedIds = deletedItems.map((item) => item.id);
+                if (deletedIds.length) batchDel(deletedIds);
                 // 快捷键
                 setShortcutKey();
                 // 通知前端删除数据
-                sendToWebContent(
-                  "mainWindow",
-                  "onDeleteItem",
-                  batchSelectedIdList
-                );
+                if (deletedIds.length) sendToWebContent("mainWindow", "onDeleteItem", deletedIds);
+                for (const item of deletedItems) {
+                  if (!item.data.desktopKey) continue;
+                  try {
+                    const trashed = await trashDesktopItem(item);
+                    if (!trashed) throw new Error("The linked desktop entry cannot be moved to Recycle Bin");
+                  } catch (error) {
+                    console.error(`[desktop] Unable to move item ${item.id} to Recycle Bin:`, error);
+                    const restored = add(item, true);
+                    if (restored) sendToWebContent("mainWindow", "onAddItem", { itemList: [restored], clear: false, classificationId: null });
+                  }
+                }
+                if (deletedIds.length) setShortcutKey();
               }
             },
           })
