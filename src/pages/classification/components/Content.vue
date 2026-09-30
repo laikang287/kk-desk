@@ -181,7 +181,7 @@
                 '-' +
                 childIndex
               "
-              class="classification-child mb-1 px-2 flex items-center h-[30px]"
+              class="classification-child mb-1 pl-4 pr-2 flex items-center h-[30px]"
               :class="[
                 `${
                   store.setting.classification.nameAlign === 'center' ||
