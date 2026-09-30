@@ -269,6 +269,19 @@ pub fn open_file_location(path: &str) {
  * 资源管理器菜单
  */
 pub fn explorer_context_menu(window: i32, path: &str, x: i32, y: i32) -> bool {
+    // Shell context menu handlers are COM objects. The Electron main thread is
+    // not guaranteed to have initialized COM, so initialize it for this call.
+    // RPC_E_CHANGED_MODE means the thread already has a different apartment;
+    // COM is still usable there, but that failed call must not be balanced.
+    let uninitialize_com = unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED).is_ok() };
+    let displayed = explorer_context_menu_inner(window, path, x, y);
+    if uninitialize_com {
+        unsafe { CoUninitialize() };
+    }
+    displayed
+}
+
+fn explorer_context_menu_inner(window: i32, path: &str, x: i32, y: i32) -> bool {
     // IShellItem
     let path = HSTRING::from(path);
     if let Ok(shell_item) =
