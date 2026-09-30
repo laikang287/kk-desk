@@ -211,7 +211,7 @@ function getSubClassification({
 function getItem({
   layout = "tile",
   iconSize = 40,
-  doubleClickOpen = false,
+  doubleClickOpen = true,
   openAfterHideMainInterface = false,
   useItemOpen = false,
   openNumber = false,
@@ -248,7 +248,7 @@ function getItem({
   return {
     layout: layout ?? "tile",
     iconSize: iconSize ?? 40,
-    doubleClickOpen: doubleClickOpen ?? false,
+    doubleClickOpen: doubleClickOpen ?? true,
     openAfterHideMainInterface: openAfterHideMainInterface ?? false,
     useItemOpen: useItemOpen ?? false,
     openNumber: openNumber ?? false,
