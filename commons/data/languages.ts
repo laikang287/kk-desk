@@ -318,6 +318,7 @@ let simplifiedChinese = {
   useQuickSearch: "启用快速搜索",
   useProxy: "使用代理",
   username: "用户名",
+  userFiles: "用户的文件",
   webSearch: "网络搜索",
   webSearchModePrompt1:
     '输入"冒号 + 关键字 + 空格"或"关键字 + 空格"使用网络搜索，例如使用谷歌搜索，输入":g"或"g"，然后按下空格键，进入网络搜索模式。',
@@ -649,6 +650,7 @@ let traditionalChinese: Language = {
   useQuickSearch: "啟用快速搜尋",
   useProxy: "使用代理",
   username: "用戶名",
+  userFiles: "使用者的檔案",
   webSearch: "網絡搜索",
   webSearchModePrompt1:
     '輸入"冒號 + 關鍵字 + 空格"或"關鍵字 + 空格"使用網絡搜索，例如使用谷歌搜索，輸入":g"或"g"，然後按下空格鍵，進入網絡搜索模式。',
@@ -1000,6 +1002,7 @@ let english: Language = {
   useQuickSearch: "Enable Quick Search",
   useProxy: "Use Proxy",
   username: "Username",
+  userFiles: "User's Files",
   webSearch: "Web Search",
   webSearchModePrompt1:
     'Enter "Colon + Keyword + Space" or "Keyword + Space" to use a web search, such as using Google search, enter ":g" or "g", and then press the space bar to enter web search mode.',
