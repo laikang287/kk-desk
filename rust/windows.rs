@@ -22,8 +22,8 @@ use windows::{
         Graphics::{
             Dwm::{DwmSetWindowAttribute, DWMWA_TRANSITIONS_FORCEDISABLED},
             Gdi::{
-                GetMonitorInfoW, GetObjectW, MonitorFromWindow, BITMAP, MONITORINFO,
-                MONITOR_DEFAULTTONEAREST,
+                DeleteObject, GetMonitorInfoW, GetObjectW, MonitorFromWindow, BITMAP, HGDIOBJ,
+                MONITORINFO, MONITOR_DEFAULTTONEAREST,
             },
         },
         Storage::FileSystem::{GetFileAttributesW, SearchPathW, FILE_ATTRIBUTE_HIDDEN, FILE_ATTRIBUTE_SYSTEM, INVALID_FILE_ATTRIBUTES},
@@ -142,32 +142,38 @@ fn get_file_icon_image_buffer(
     let result =
         unsafe { shell_item_image_factory.GetImage(SIZE { cx: size, cy: size }, SIIGBF_ICONONLY) };
     if let Ok(h_bitmap) = result {
-        // 转为BITMAP
-        let mut bitmap: BITMAP = BITMAP::default();
-        unsafe {
-            GetObjectW(
-                h_bitmap,
-                std::mem::size_of::<BITMAP>() as i32,
-                Some(&mut bitmap as *mut _ as _),
-            );
-        }
-        // 转换ImageBuffer
-        let width: u32 = bitmap.bmWidth as u32;
-        let height = bitmap.bmHeight as u32;
-        let pixel_data: &[u8] = unsafe {
-            std::slice::from_raw_parts(bitmap.bmBits as *const u8, (width * height * 4) as usize)
-        };
-        let result = ImageBuffer::<Rgba<u8>, _>::from_raw(width, height, pixel_data.to_vec());
-        if let Some(mut image_buffer) = result {
-            // 将ImageBuffer的颜色通道顺序从BGRA转为RGB
+        // GetImage 返回调用方持有的 HBITMAP。无论后续像素提取是否成功，
+        // 都要在离开此分支前释放它，否则周期性取图标会持续泄漏 GDI 对象。
+        let image_buffer = (|| {
+            let mut bitmap: BITMAP = BITMAP::default();
+            unsafe {
+                GetObjectW(
+                    h_bitmap,
+                    std::mem::size_of::<BITMAP>() as i32,
+                    Some(&mut bitmap as *mut _ as _),
+                );
+            }
+            let width = bitmap.bmWidth as u32;
+            let height = bitmap.bmHeight as u32;
+            let pixel_data: &[u8] = unsafe {
+                std::slice::from_raw_parts(
+                    bitmap.bmBits as *const u8,
+                    (width * height * 4) as usize,
+                )
+            };
+            let mut image_buffer = ImageBuffer::<Rgba<u8>, _>::from_raw(width, height, pixel_data.to_vec())?;
             for pixel in image_buffer.pixels_mut() {
                 let b = pixel[0];
                 let r = pixel[2];
                 pixel[0] = r;
                 pixel[2] = b;
             }
-            return Some(image_buffer);
+            Some(image_buffer)
+        })();
+        unsafe {
+            DeleteObject(HGDIOBJ(h_bitmap.0));
         }
+        return image_buffer;
     }
     None
 }
