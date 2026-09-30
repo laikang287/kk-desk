@@ -31,7 +31,7 @@ KK Desk 是一款面向 Windows 10/11 的快捷启动工具，和桌面实时同
 
 ## 许可与致谢
 
-代码采用 MIT 许可，详见 [LICENSE](../2_项目/99999999_归档/20260315-科技筑梦_创新成长_陈启航/codex生成的/node_modules/lie/license.md)。原项目的版权与许可声明予以保留；来源说明见 [NOTICE.md](NOTICE.md)。感谢 Dawn Launcher 原作者与贡献者。
+代码采用 MIT 许可，详见[LICENSE](./LICENSE)。原项目的版权与许可声明予以保留；来源说明见 [NOTICE.md](NOTICE.md)。感谢 Dawn Launcher 原作者与贡献者。
 
 ## 注意事项
 - 以中文文档为主，其它文档基于中文文档使用AI翻译，后续若有更新，优先更新中文、英文文档

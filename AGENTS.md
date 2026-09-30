@@ -13,8 +13,8 @@
 ## 文档i18n
 - 如果没有明确说明文档要 i18n，则不要进行 i18n
 - 有各种语言的README，分别支持`en`、`zh-CN`、`zh-TW`、`ja`、`ko`、`fr`、`de`、`es`、`ru`
-- `README.zh-CN.md`、`README.md`，这两份文档在项目根目录，其它语言的README文档在docs
-- `README.zh-CN.md` 为主文档，手动编写和修改，如果明确说明文档要支持i18n时，则使用AI翻译将README.zh-CN.md翻译为其它语言
+- `README.zh-CN.md`、`README.md`，这两份文档在项目根目录，其它语言的README文档在docs目录下
+- `README.zh-CN.md` 为主文档，手动编写和修改，如果明确说明文档要支持i18n时，则使用AI翻译将README.zh-CN.md翻译为README.md(英语)等其它语言
 - `upstream/` 下的文档属于上游原始文档，`NOTICE.md`、`LICENSE` 属于来源/许可文件，均不纳入本项目文档 i18n。
 
 ## Git 提交
