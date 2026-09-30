@@ -27,7 +27,7 @@ function createSettingWindow() {
   closeWindow(settingWindow);
   // 创建窗口
   settingWindow = global.settingWindow = new BrowserWindow({
-    title: "kk Dawn Launcher",
+    title: "KK Desk",
     frame: false,
     parent: global.mainWindow,
     height: 500,

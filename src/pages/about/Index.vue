@@ -26,21 +26,23 @@
         <CloseRound></CloseRound>
       </Icon>
     </div>
-    <div class="px-2">
+    <div class="px-4">
       <img
         src="/logo-transparent.png"
-        class="w-20 h-20 mx-auto block"
+        class="w-56 h-24 mx-auto block object-contain"
         draggable="false"
       />
-      <p class="mt-4">kk Dawn Launcher {{ version }}</p>
+      <p class="mt-2">KK Desk {{ version }}</p>
+      <p class="mt-2">Copyright © 2026 KK Desk contributors</p>
+      <p class="mt-2">{{ store.language.unofficialFork }}</p>
+      <p class="mt-2">{{ store.language.upstreamCopyright }}</p>
       <p class="mt-2">
-        Copyright © 2022-2026 Dawn Launcher. All Rights Reserved
+        {{ store.language.projectRepository }}{{ store.language.colon }}
+        <span @click="openProject" class="cursor-pointer">github.com/laikang287/kk-desk</span>
       </p>
       <p class="mt-2">
-        {{ store.language.officialWebsite }}{{ store.language.colon
-        }}<span @click="openUrl" class="cursor-pointer"
-          >https://dawnlauncher.com/</span
-        >
+        {{ store.language.upstreamProject }}{{ store.language.colon }}
+        <span @click="openUpstream" class="cursor-pointer">github.com/fanchenio/DawnLauncher</span>
       </p>
     </div>
   </div>
@@ -55,9 +57,11 @@ import { useMainStore } from "../../store";
 const store = useMainStore();
 // 版本
 let version = window.api.getVersion();
-// 打开网站
-function openUrl() {
-  window.api.openURL("https://dawnlauncher.com/");
+function openProject() {
+  window.api.openURL("https://github.com/laikang287/kk-desk");
+}
+function openUpstream() {
+  window.api.openURL("https://github.com/fanchenio/DawnLauncher");
 }
 // 关闭
 function close() {

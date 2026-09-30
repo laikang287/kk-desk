@@ -48,7 +48,7 @@
                   : undefined,
             }"
           >
-            {{ classification.name }}
+            {{ getLocalizedClassificationName(classification, store.language) }}
           </p>
           <ItemList
             class="pt-1"
@@ -91,6 +91,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { getLocalizedClassificationName } from "../../../../commons/utils/classificationName";
 import {
   ref,
   onMounted,

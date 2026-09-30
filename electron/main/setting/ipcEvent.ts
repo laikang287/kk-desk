@@ -126,7 +126,7 @@ export default function () {
     let filePathList = showOpenDialogSync("settingWindow", {
       filters: [
         {
-          name: "Images",
+          name: global.language.images,
           extensions: ["jpg", "jpeg", "png", "gif", "ico", "svg", "webp"],
         },
       ],

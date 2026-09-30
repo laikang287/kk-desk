@@ -17,6 +17,30 @@ let db = getCacheDataSqlite3();
 // 系统项目表名
 let systenItemTableName = "system_item";
 
+// IDs are stable in the system item cache; names are localized when read.
+const systemItemLanguageKeys = [
+  "computer",
+  "documents",
+  "controlPanel",
+  "networkShareCenter",
+  "recycleBin",
+  "fileExplorer",
+  "programsFeatures",
+  "calculator",
+  "services",
+  "commandPrompt",
+  "taskManager",
+  "registryEditor",
+  "powerOptions",
+  "resourceMonitor",
+  "computerManagement",
+  "shutdown",
+  "restart",
+  "sleep",
+  "lock",
+  "turnOffMonitor",
+] as const;
+
 // 开始菜单项目表名
 let startMenuItemTableName = "start_menu_item";
 
@@ -477,8 +501,13 @@ function list(table: string) {
   // 查询
   let list = db.prepare(sql).all();
   // 返回
-  return list.map((row) => {
-    return getCommonItem(row);
+  return list.map((row: any) => {
+    const item = getCommonItem(row);
+    if (table === systenItemTableName) {
+      const key = systemItemLanguageKeys[item.id - 1];
+      if (key) item.name = global.language[key];
+    }
+    return item;
   });
 }
 

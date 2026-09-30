@@ -343,24 +343,6 @@
                 ></NFormItem
               >
             </NForm>
-            <NForm
-              label-placement="left"
-              label-width="auto"
-              :show-feedback="false"
-              size="small"
-              class="mt-3"
-            >
-              <span class="block font-semibold">{{
-                store.language.update
-              }}</span>
-              <NFormItem class="mt-1"
-                ><NCheckbox
-                  v-model:checked="setting.general.checkUpdates"
-                  :focusable="false"
-                  >{{ store.language.checkUpdates }}</NCheckbox
-                >
-              </NFormItem>
-            </NForm>
           </div>
           <div class="mx-2" v-if="selectedMenuId === 1">
             <div>

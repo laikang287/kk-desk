@@ -3,10 +3,11 @@
  */
 {
   $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  appId: "com.kkdawnlauncher.application",
+  appId: "com.laikang287.kklauncher",
   asar: true,
   compression: "maximum",
-  productName: "kk Dawn Launcher",
+  productName: "KK Desk",
+  copyright: "Copyright © 2026 KK Desk contributors",
   directories: {
     output: "release/${version}",
   },
@@ -14,15 +15,15 @@
   npmRebuild: false,
   files: ["dist", "dist-electron", "native", "!node_modules/**/*"],
   win: {
-    appId: "com.kkdawnlauncher.application",
-    executableName: "kk Dawn Launcher",
+    appId: "com.laikang287.kklauncher",
+    executableName: "KK Desk",
     target: [
       {
         target: "nsis",
         arch: ["x64"],
       },
     ],
-    artifactName: "${productName}-Windows-${version}-Setup.${ext}",
+    artifactName: "${productName}-${version}-${arch}-Setup.${ext}",
     icon: "public/logo.ico",
   },
   nsis: {
@@ -33,4 +34,11 @@
     createDesktopShortcut: true,
     createStartMenuShortcut: true,
   },
+  portable: {
+    artifactName: "${productName}-${version}-${arch}-portable.${ext}",
+  },
+  extraResources: [
+    { from: "LICENSE", to: "LICENSE" },
+    { from: "NOTICE.md", to: "NOTICE.md" },
+  ],
 }

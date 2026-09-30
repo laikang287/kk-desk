@@ -305,7 +305,7 @@ let topRightMenuOptions = ref<Array<any>>([
     key: "Feedback",
     props: {
       onclick: () => {
-        window.api.openURL("https://support.qq.com/product/487828");
+        window.api.openURL("https://github.com/laikang287/kk-desk/issues");
       },
     },
   },

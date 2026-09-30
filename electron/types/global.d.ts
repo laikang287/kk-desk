@@ -1,6 +1,7 @@
 import { BrowserWindow, Tray } from "electron";
 import { FSWatcher } from "node:fs";
 import { Setting } from "../../types/setting";
+import type { Language } from "../../commons/data/languages";
 
 declare global {
   // addon
@@ -8,7 +9,7 @@ declare global {
   // 是否是首次打开软件
   var first: boolean;
   // 语言
-  var language: any;
+  var language: Language;
   // 主窗口
   var mainWindow: BrowserWindow | null;
   // 快速搜索窗口

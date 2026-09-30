@@ -5,6 +5,7 @@ import {
   clipboard,
   MenuItemConstructorOptions,
 } from "electron";
+import { getLocalizedClassificationName } from "../../../commons/utils/classificationName";
 import { parsePath } from "../../commons/utils";
 import {
   convertTarget,
@@ -84,7 +85,7 @@ function getCopyMoveMenuItems(
     for (const child of classificationList) {
       if (parent.id === child.parentId && child.type === 0) {
         submenus.push({
-          label: child.name,
+          label: getLocalizedClassificationName(child, global.language) ?? "",
           click: () => {
             if (type === "CopyItem") {
               copy(idList, child.id);
@@ -97,12 +98,12 @@ function getCopyMoveMenuItems(
     }
     if (submenus.length > 0) {
       menuItems.push({
-        label: parent.name,
+        label: getLocalizedClassificationName(parent, global.language) ?? "",
         submenu: submenus,
       });
     } else {
       menuItems.push({
-        label: parent.name,
+        label: getLocalizedClassificationName(parent, global.language) ?? "",
         click: () => {
           if (type === "CopyItem") {
             copy(idList, parent.id);
@@ -499,7 +500,7 @@ export default function () {
             if (classification.type === 0) {
               submenus.push(
                 new MenuItem({
-                  label: classification.name,
+                  label: getLocalizedClassificationName(classification, global.language) ?? "",
                   click: () => {
                     // 创建窗口
                     createAddEditWindow(null, classification.id);

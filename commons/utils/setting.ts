@@ -43,7 +43,6 @@ function getGeneral({
   delayHideMs = 0,
   switchEnglish = false,
   searchShowHideShortcutKey = "TAB",
-  checkUpdates = true,
 }: {
   startup?: boolean | null;
   startupTray?: boolean | null;
@@ -66,7 +65,6 @@ function getGeneral({
   delayHideMs?: number | null;
   switchEnglish?: boolean | null;
   searchShowHideShortcutKey?: string | null;
-  checkUpdates?: boolean | null;
 }): General {
   return {
     startup: startup ?? false,
@@ -90,7 +88,6 @@ function getGeneral({
     delayHideMs: delayHideMs ?? 0,
     switchEnglish: switchEnglish ?? false,
     searchShowHideShortcutKey: searchShowHideShortcutKey ?? null,
-    checkUpdates: checkUpdates ?? true,
   };
 }
 
@@ -108,7 +105,7 @@ function getAppearance({
   fontShadow = false,
   fontShadowColor = "#000000",
   windowRounded = false,
-  title = "kk Dawn Launcher",
+  title = "KK Desk",
 }: {
   theme?: Theme | null;
   transparency?: number | null;
@@ -131,7 +128,10 @@ function getAppearance({
     fontShadow: fontShadow ?? false,
     fontShadowColor: fontShadowColor ?? "#000000",
     windowRounded: windowRounded ?? false,
-    title: title ?? "kk Dawn Launcher",
+    title:
+      title === "kk Dawn Launcher" || title === "Dawn Launcher"
+        ? "KK Desk"
+        : title ?? "KK Desk",
   };
 }
 

@@ -35,6 +35,8 @@ let simplifiedChinese = {
   backgroundImageMode: "背景图模式",
   backgroundImagePosition: "背景图定位",
   backgroundImageTransparency: "背景图透明度",
+  backgroundImageTransparent: "背景图透明度",
+  backgroundTransparent: "窗口背景透明度",
   backup: "备份",
   backupRestoreData: "备份/还原数据",
   backupRestoreDataPrompt:
@@ -58,10 +60,6 @@ let simplifiedChinese = {
   center: "居中",
   checkCode: "校验代码",
   checkInvalidItem: "检查无效项目",
-  checkUpdates: "检查更新",
-  checkUpdatesPrompt1: '检查到有新版本，点击"确定"跳转官网下载最新版本。',
-  checkUpdatesPrompt2: "当前已经是最新版本。",
-  checkUpdatesPrompt3: "检查更新失败，请确认网络。",
   classification: "分类",
   clear: "清空",
   close: "关闭",
@@ -72,6 +70,9 @@ let simplifiedChinese = {
   commandLine: "命令行",
   commandLinePrompt1: '在"快速搜索"或"搜索"中使用"> + 空格"进入命令行模式。',
   commandPrompt: "命令提示符",
+  dataFile: "数据文件",
+  databaseFile: "数据库文件",
+  debuggerNotAllowed: "不允许调试此应用。",
   computer: "计算机",
   computerManagement: "计算机管理",
   controlPanel: "控制面板",
@@ -117,7 +118,7 @@ let simplifiedChinese = {
   contextMenuMode: "图标右键菜单模式",
   desktopContextMenu: "桌面模式",
   desktopClassification: "桌面",
-  dawnContextMenu: "kk Dawn Launcher 模式",
+  dawnContextMenu: "KK Desk 模式",
   associateDesktop: "关联桌面",
   defaultClassification: "默认分类",
   associateDesktopPrompt: "关联桌面会清空当前分类中的项目，并由桌面图标同步替换。是否继续？",
@@ -156,6 +157,7 @@ let simplifiedChinese = {
   hover: "悬停",
   icon: "图标",
   imageLink: "图片链接",
+  images: "图片",
   item: "项目",
   itemAddEditPrompt1: "选中固定图标后，当前项目不参与刷新图标。",
   itemAddEditPrompt2: "无特殊需求为空即可",
@@ -202,15 +204,20 @@ let simplifiedChinese = {
   normal: "普通",
   notDisturb: "勿扰模式",
   notDisturbPrompt:
-    "开启勿扰模式后，计算机在游戏、应用全屏模式下不会弹出 kk Dawn Launcher 窗口。",
+    "开启勿扰模式后，计算机在游戏、应用全屏模式下不会弹出 KK Desk 窗口。",
   notFoundFile: "找不到指定的文件",
   notFoundFolder: "找不到指定的文件夹",
   notTransparent: "不透明",
   number: "数量",
   numberKey: "数字键",
-  officialWebsite: "官方网站",
+  projectRepository: "项目仓库",
+  unofficialFork: "基于 Dawn Launcher 的非官方分支，与原项目无隶属关系。",
+  upstreamCopyright: "原项目版权 © 2023 Dawn Launcher；代码遵循 MIT 许可。",
+  upstreamProject: "原项目",
   ok: "确定",
   open: "打开",
+  openAfterHideMainInterface: "打开项目后隐藏主界面",
+  openAfterHideQuickSearchWindow: "打开项目后隐藏快速搜索窗口",
   openFileLocation: "打开文件所在位置",
   openNow: "仅剩一项立即打开",
   openCount: "打开次数",
@@ -307,9 +314,9 @@ let simplifiedChinese = {
   uploadIcon: "上传图标",
   url: "网址",
   useItemOpen: "从程序外拖动文件到项目图标上用此项目打开文件",
+  useQuickSearch: "启用快速搜索",
   useProxy: "使用代理",
   username: "用户名",
-  update: "更新",
   webSearch: "网络搜索",
   webSearchModePrompt1:
     '输入"冒号 + 关键字 + 空格"或"关键字 + 空格"使用网络搜索，例如使用谷歌搜索，输入":g"或"g"，然后按下空格键，进入网络搜索模式。',
@@ -320,7 +327,9 @@ let simplifiedChinese = {
   zoom: "缩放",
 };
 
-let traditionalChinese = {
+type Language = typeof simplifiedChinese;
+
+let traditionalChinese: Language = {
   about: "關於",
   add: "新增",
   address: "地址",
@@ -356,6 +365,8 @@ let traditionalChinese = {
   backgroundImageMode: "背景圖模式",
   backgroundImagePosition: "背景圖定位",
   backgroundImageTransparency: "背景圖透明度",
+  backgroundImageTransparent: "背景圖透明度",
+  backgroundTransparent: "視窗背景透明度",
   backup: "備份",
   backupRestoreData: "備份/還原數據",
   backupRestoreDataPrompt:
@@ -379,10 +390,6 @@ let traditionalChinese = {
   center: "居中",
   checkCode: "校驗代碼",
   checkInvalidItem: "檢查無效項目",
-  checkUpdates: "檢查更新",
-  checkUpdatesPrompt1: '檢查到有新版本，點擊"確定"跳轉官網下載最新版本。',
-  checkUpdatesPrompt2: "當前已經是最新版本。",
-  checkUpdatesPrompt3: "檢查更新失敗，請確認網絡。",
   classification: "分類",
   clear: "清空",
   close: "關閉",
@@ -393,6 +400,9 @@ let traditionalChinese = {
   commandLine: "命令行",
   commandLinePrompt1: '在"快速搜索"或"搜索"中使用"> + 空格"進入命令行模式。',
   commandPrompt: "命令提示符",
+  dataFile: "資料檔案",
+  databaseFile: "資料庫檔案",
+  debuggerNotAllowed: "不允許偵錯此應用程式。",
   computer: "計算機",
   computerManagement: "計算機管理",
   controlPanel: "控製面板",
@@ -438,7 +448,7 @@ let traditionalChinese = {
   contextMenuMode: "圖標右鍵菜單模式",
   desktopContextMenu: "桌面模式",
   desktopClassification: "桌面",
-  dawnContextMenu: "kk Dawn Launcher 模式",
+  dawnContextMenu: "KK Desk 模式",
   associateDesktop: "關聯桌面",
   defaultClassification: "預設分類",
   associateDesktopPrompt: "關聯桌面會清空當前分類中的項目，並由桌面圖標同步替換。是否繼續？",
@@ -477,6 +487,7 @@ let traditionalChinese = {
   hover: "懸停",
   icon: "圖標",
   imageLink: "圖片鏈接",
+  images: "圖片",
   item: "項目",
   itemAddEditPrompt1: "選中固定圖標後，當前項目不參與刷新圖標。",
   itemAddEditPrompt2: "無特殊需求為空即可",
@@ -523,15 +534,20 @@ let traditionalChinese = {
   normal: "普通",
   notDisturb: "勿擾模式",
   notDisturbPrompt:
-    "開啟勿擾模式後，計算機在遊戲、應用全屏模式下不會彈出 kk Dawn Launcher 窗口。",
+    "開啟勿擾模式後，計算機在遊戲、應用全屏模式下不會彈出 KK Desk 窗口。",
   notFoundFile: "找不到指定的文件",
   notFoundFolder: "找不到指定的文件夾",
   notTransparent: "不透明",
   number: "數量",
   numberKey: "數字鍵",
-  officialWebsite: "官方網站",
+  projectRepository: "專案倉庫",
+  unofficialFork: "基於 Dawn Launcher 的非官方分支，與原專案無隸屬關係。",
+  upstreamCopyright: "原專案版權 © 2023 Dawn Launcher；程式碼遵循 MIT 授權。",
+  upstreamProject: "原專案",
   ok: "確定",
   open: "打開",
+  openAfterHideMainInterface: "開啟項目後隱藏主介面",
+  openAfterHideQuickSearchWindow: "開啟項目後隱藏快速搜尋視窗",
   openFileLocation: "打開文件所在位置",
   openNow: "僅剩一項立即打開",
   openCount: "打開次數",
@@ -628,9 +644,9 @@ let traditionalChinese = {
   uploadIcon: "上傳圖標",
   url: "網址",
   useItemOpen: "從程序外拖動文件到項目圖標上用此項目打開文件",
+  useQuickSearch: "啟用快速搜尋",
   useProxy: "使用代理",
   username: "用戶名",
-  update: "更新",
   webSearch: "網絡搜索",
   webSearchModePrompt1:
     '輸入"冒號 + 關鍵字 + 空格"或"關鍵字 + 空格"使用網絡搜索，例如使用谷歌搜索，輸入":g"或"g"，然後按下空格鍵，進入網絡搜索模式。',
@@ -642,7 +658,7 @@ let traditionalChinese = {
 };
 
 // 英语
-let english = {
+let english: Language = {
   about: "About",
   add: "Add",
   address: "Address",
@@ -682,6 +698,8 @@ let english = {
   backgroundImageMode: "Background Image Mode",
   backgroundImagePosition: "Background Image Position",
   backgroundImageTransparency: "Background Image Transparency",
+  backgroundImageTransparent: "Background Image Opacity",
+  backgroundTransparent: "Window Background Opacity",
   backup: "Backup",
   backupRestoreData: "Backup/Restore Data",
   backupRestoreDataPrompt:
@@ -705,12 +723,6 @@ let english = {
   center: "Center",
   checkCode: "Check Code",
   checkInvalidItem: "Check for Invalid Items",
-  checkUpdates: "Check Updates",
-  checkUpdatesPrompt1:
-    "A new version has been detected. Click 'OK' to go to the official website and download the latest version.",
-  checkUpdatesPrompt2: "You are already on the latest version.",
-  checkUpdatesPrompt3:
-    "Update check failed. Please check your network connection.",
   classification: "Classification",
   clear: "Clear",
   close: "Close",
@@ -722,6 +734,9 @@ let english = {
   commandLinePrompt1:
     'Use "> + Space" in "Quick Search" or "Search" to enter command-line mode.',
   commandPrompt: "Command Prompt",
+  dataFile: "Data Files",
+  databaseFile: "Database Files",
+  debuggerNotAllowed: "Debugging this application is not allowed.",
   computer: "Computer",
   computerManagement: "Computer Management",
   controlPanel: "Control Panel",
@@ -767,7 +782,7 @@ let english = {
   contextMenuMode: "Icon Context Menu Mode",
   desktopContextMenu: "Desktop Mode",
   desktopClassification: "Desktop",
-  dawnContextMenu: "kk Dawn Launcher Mode",
+  dawnContextMenu: "KK Desk Mode",
   associateDesktop: "Associate Desktop",
   defaultClassification: "Default",
   associateDesktopPrompt: "Associating the desktop replaces all items in this classification with synchronized desktop icons. Continue?",
@@ -807,6 +822,7 @@ let english = {
   hover: "Hover",
   icon: "Icon",
   imageLink: "Image Link",
+  images: "Images",
   item: "Item",
   itemAddEditPrompt1:
     "After selecting a fixed icon, the current item will not participate in icon refreshing.",
@@ -854,15 +870,20 @@ let english = {
   normal: "Normal",
   notDisturb: "Not Disturb Mode",
   notDisturbPrompt:
-    "After enabling Do Not Disturb mode, kk Dawn Launcher will not pop up during full-screen games or applications.",
+    "After enabling Do Not Disturb mode, KK Desk will not pop up during full-screen games or applications.",
   notFoundFile: "The file specified cannot be found",
   notFoundFolder: "The specified folder cannot be found",
   notTransparent: "Not Transparent",
   number: "Number",
   numberKey: "Number Key",
-  officialWebsite: "Official Website",
+  projectRepository: "Project repository",
+  unofficialFork: "An unofficial fork of Dawn Launcher, unaffiliated with the original project.",
+  upstreamCopyright: "Original project © 2023 Dawn Launcher; code is licensed under MIT.",
+  upstreamProject: "Original project",
   ok: "OK",
   open: "Open",
+  openAfterHideMainInterface: "Hide Main Window After Opening an Item",
+  openAfterHideQuickSearchWindow: "Hide Quick Search After Opening an Item",
   openFileLocation: "Open File Location",
   openNow: "Only one item left to open immediately",
   openCount: "Open Count",
@@ -973,9 +994,9 @@ let english = {
   url: "URL",
   useItemOpen:
     "Open files with this item when dragging files from outside the program to the item icon",
+  useQuickSearch: "Enable Quick Search",
   useProxy: "Use Proxy",
   username: "Username",
-  update: "Update",
   webSearch: "Web Search",
   webSearchModePrompt1:
     'Enter "Colon + Keyword + Space" or "Keyword + Space" to use a web search, such as using Google search, enter ":g" or "g", and then press the space bar to enter web search mode.',
@@ -991,7 +1012,7 @@ let english = {
  * @param language
  * @returns
  */
-function getLanguage(language: string | null) {
+function getLanguage(language: string | null): Language {
   if (language === "SimplifiedChinese") {
     return simplifiedChinese;
   } else if (language === "TraditionalChinese") {
@@ -1003,3 +1024,4 @@ function getLanguage(language: string | null) {
 }
 
 export { getLanguage };
+export type { Language };

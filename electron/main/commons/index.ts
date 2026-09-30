@@ -508,7 +508,7 @@ function showMessageBoxSync(
     global.mainWindowShowDialog = true;
   }
   let res = dialog.showMessageBoxSync(getWindow(windowName), {
-    title: "kk Dawn Launcher",
+    title: "KK Desk",
     message: message,
     buttons: buttons,
     type: type,

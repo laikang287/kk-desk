@@ -22,7 +22,7 @@ import aboutIpcEvent from "./about/ipcEvent";
 import dataIpcEvent from "./data/ipcEvent";
 
 // 数据存储目录
-app.setName("kk Dawn Launcher");
+app.setName("KK Desk");
 if (
   process.env.NODE_ENV !== "development" &&
   import.meta.env.VITE_INSTALL === "false"
@@ -50,7 +50,7 @@ if (global.setting.appearance.transparency === 1) {
 }
 
 // Set application name for Windows 10+ notifications
-if (process.platform === "win32") app.setAppUserModelId("com.kkdawnlauncher.application");
+if (process.platform === "win32") app.setAppUserModelId("com.laikang287.kklauncher");
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -73,7 +73,10 @@ app.whenReady().then(() => {
     global.addon = require("../../native/addon.node");
     if (global.first) {
       // 首次添加，判断系统语言
-      if (app.getLocale().toLowerCase().indexOf("zh-") === 0) {
+      const locale = app.getLocale().toLowerCase();
+      if (/^zh-(tw|hk|mo)/.test(locale)) {
+        global.setting.general.language = "TraditionalChinese";
+      } else if (locale === "zh" || locale.startsWith("zh-")) {
         // 简体中文
         global.setting.general.language = "SimplifiedChinese";
       } else {
@@ -93,7 +96,7 @@ app.whenReady().then(() => {
         arg.indexOf("--remote-debugging-port") !== -1
       ) {
         dialog.showMessageBoxSync({
-          message: "达咩呦达咩达咩~",
+          message: global.language.debuggerNotAllowed,
           buttons: [global.language.ok],
           type: "error",
           noLink: true,
@@ -139,7 +142,7 @@ app.whenReady().then(() => {
     } else {
       dialog.showMessageBoxSync({
         type: "error",
-        title: "kk Dawn Launcher",
+        title: "KK Desk",
         message: e.stack,
       });
       app.quit();
@@ -151,7 +154,7 @@ app.whenReady().then(() => {
 process.on("uncaughtException", (err) => {
   dialog.showMessageBoxSync({
     type: "error",
-    title: "kk Dawn Launcher",
+    title: "KK Desk",
     message: err.stack,
   });
   // 关闭所有子进程

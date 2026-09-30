@@ -8,11 +8,11 @@ import { add, del, list, update } from "./data";
 
 const watchers = new Map<number, { handles: FSWatcher[]; debounce: NodeJS.Timeout | null; interval: NodeJS.Timeout | null }>();
 const virtualDesktopItems = [
-  { key: "shell:MyComputerFolder", name: "计算机", target: "shell:MyComputerFolder", clsid: "{20D04FE0-3AEA-1069-A2D8-08002B30309D}", visibleByDefault: false },
-  { key: "shell:Local Documents", name: "文档", target: "shell:Local Documents", clsid: "{59031A47-3F72-44A7-89C5-5595FE6B30EE}", visibleByDefault: false },
-  { key: "shell:ControlPanelFolder", name: "控制面板", target: "shell:ControlPanelFolder", clsid: "{26EE0668-A00A-44D7-9371-BEB064C98683}", visibleByDefault: false },
-  { key: "shell:NetworkPlacesFolder", name: "网络", target: "shell:NetworkPlacesFolder", clsid: "{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", visibleByDefault: false },
-  { key: "shell:RecycleBinFolder", name: "回收站", target: "shell:RecycleBinFolder", clsid: "{645FF040-5081-101B-9F08-00AA002F954E}", visibleByDefault: true },
+  { key: "shell:MyComputerFolder", target: "shell:MyComputerFolder", clsid: "{20D04FE0-3AEA-1069-A2D8-08002B30309D}", visibleByDefault: false },
+  { key: "shell:Local Documents", target: "shell:Local Documents", clsid: "{59031A47-3F72-44A7-89C5-5595FE6B30EE}", visibleByDefault: false },
+  { key: "shell:ControlPanelFolder", target: "shell:ControlPanelFolder", clsid: "{26EE0668-A00A-44D7-9371-BEB064C98683}", visibleByDefault: false },
+  { key: "shell:NetworkPlacesFolder", target: "shell:NetworkPlacesFolder", clsid: "{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", visibleByDefault: false },
+  { key: "shell:RecycleBinFolder", target: "shell:RecycleBinFolder", clsid: "{645FF040-5081-101B-9F08-00AA002F954E}", visibleByDefault: true },
 ];
 
 function defaultChild(rootId: number) {
@@ -112,7 +112,7 @@ function collectDesktopItems(rootId: number) {
       : virtual.key === "shell:ControlPanelFolder" ? "controlPanel"
       : virtual.key === "shell:NetworkPlacesFolder" ? "network"
       : "recycleBin";
-    item.name = global.language[languageKey] ?? virtual.name;
+    item.name = global.language[languageKey];
     item.type = 3;
     item.data.target = virtual.target;
     item.data.desktopKey = virtual.key;

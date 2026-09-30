@@ -1,5 +1,6 @@
 import { Classification } from "../../../../types/classification";
 import { useMainStore } from "../../../store";
+import { getLocalizedClassificationName } from "../../../../commons/utils/classificationName";
 import {
   deleteItemByClassificationId,
   moveItemByClassificationId,
@@ -298,6 +299,7 @@ function updateClassificationIcon(id: number, icon: string | null) {
  * 获取名称
  */
 function getClassificationName(classification: Classification) {
+  const localizedName = getLocalizedClassificationName(classification, store.language);
   let name = "";
   if (classification.data.icon && classification.data.icon.trim() !== "") {
     name += classification.data.icon;
@@ -306,10 +308,10 @@ function getClassificationName(classification: Classification) {
     if (name.trim() !== "") {
       name += " ";
     }
-    name += classification.name;
+    name += localizedName ?? "";
   } else {
-    if (name === "" && classification.name && classification.name.length > 0) {
-      name += classification.name.substring(0, 1);
+    if (name === "" && localizedName && localizedName.length > 0) {
+      name += localizedName.substring(0, 1);
     }
   }
   return name;

@@ -3,7 +3,7 @@ import { Setting } from "../../types/setting";
 import { Classification } from "../../types/classification";
 import { getSetting } from "../../commons/utils/setting";
 import { Item } from "../../types/item";
-import { getLanguage } from "../../commons/data/languages";
+import { getLanguage, type Language } from "../../commons/data/languages";
 
 export interface State {
   // 设置
@@ -47,7 +47,7 @@ export interface State {
   // 快速搜索功能项目区域右键ID
   quickSearchItemRightMenuItemId: number | null;
   // 当前语言
-  language: any;
+  language: Language;
 }
 
 export const useMainStore = defineStore("main", {

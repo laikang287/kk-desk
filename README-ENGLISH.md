@@ -1,68 +1,38 @@
-# [简体中文](https://github.com/fanchenio/DawnLauncher) | English
+# KK Desk
 
-# kk Dawn Launcher
+[简体中文](README.md) · [Original upstream docs](upstream/README-ENGLISH.md) · [Report an issue](https://github.com/laikang287/kk-desk/issues)
 
-The `Windows` quick launch tool helps you organize your messy desktop, manage your desktop shortcuts by category, and keep your desktop clean and tidy.
+KK Desk is a quick launcher for Windows 10/11. **I maintain this project primarily for my own use and share the source code along the way.** Features and release timing follow my personal needs.
 
-Supports associated folders (real-time synchronization of folder contents), quick search, relative paths (portable paths), scanning the local start menu, locally scanning the local Appx application list, adding URLs and obtaining URL information with one click.
+## Main feature: Associate Desktop
 
-# Technology Stack
+Once associated, the launcher displays your desktop icons in a classification you can use from the launcher.
 
-`Electron + Vite + Vue3 + TS + Rust`
+1. **Launch other programs without returning to the desktop.** Open a desktop shortcut or folder directly in the launcher instead of minimizing your current windows to find its icon.
+2. **Keep icons in sync with the desktop in real time.** Icons in the launcher update automatically when desktop items are added, removed, or renamed. The app watches the current user's and public desktop folders and periodically checks for changes.
 
-# Support Platform
+The first launch creates a Desktop classification. You can also associate a classification from its context menu. Associating an existing classification replaces its current items with desktop icons, so check that it contains nothing you need to keep.
 
-`Windows(10/11)`
+The fork also retains upstream features such as categories, linked folders, quick search, relative paths, Start menu and Appx app discovery, and website shortcuts.
 
-# Compilation Steps
+## Origin and relationship to upstream
 
-1. Install `node-gyp`, required to compile SQLite3.
-2. Install the `Rust` environment + `Cargo`, which is needed to compile Rust.
-3. Then run `yarn install` to install the project dependencies (if you modify the `Rust` code, you need to re-run `yarn install`).
-4. `yarn run dev` runs the project locally.
-5. `yarn run build` packages the project.
-6. The portable version and the installation version need to be packaged twice. By modifying `VITE_INSTALL` in `.env.production`, `true` means the installation version and `false` means the portable version.
+This project is forked from [Dawn Launcher](https://github.com/fanchenio/DawnLauncher) **v1.5.2** (upstream tag [`1.5.2`](https://github.com/fanchenio/DawnLauncher/releases/tag/1.5.2), at commit `ac36714` in this repository's history). It is an independently maintained, unofficial fork. It is not affiliated with or endorsed by the original project.
 
-# Official Website
+Compared with upstream v1.5.2, this fork's main addition is **desktop association and desktop icon synchronization**. It also changes the name, icons, and some behavior for personal use. For this fork's releases and issues, use [this repository](https://github.com/laikang287/kk-desk). The original project documentation is preserved here in [Chinese](upstream/README.md) and [English](upstream/README-ENGLISH.md).
 
-[dawnlauncher.com](https://dawnlauncher.com/)
+## Download and build
 
-# UI
+Source code and releases: [KK Desk repository](https://github.com/laikang287/kk-desk). The portable edition stores data in a `data` directory beside the executable. Use the app's backup and restore feature when migrating from an older edition.
 
-![UI](/images/soft1.png)
+The stack is Electron, Vite, Vue 3, TypeScript, and Rust. Development requires Node.js, Yarn, Rust/Cargo, and node-gyp for SQLite3. After installing dependencies, run `corepack yarn dev`. To build the Windows portable edition, run:
 
-## Subclassification
+```powershell
+corepack yarn vue-tsc --noEmit
+corepack yarn vite build
+corepack yarn electron-builder --win portable
+```
 
-![Subclassification](/images/soft2.png)
+## License and credits
 
-## Custom Theme
-
-![Custom Theme](/images/soft3.png)
-
-## Custom Background
-
-![Custom Background](/images/soft4.png)
-
-## Quick Search
-
-![Quick Search](/images/soft5.png)
-
-## Get URL Information with One Click
-
-![Get URL information with one click](/images/soft6.webp)
-
-## Relative Paths (Portable Paths)
-
-![Relative Paths (Portable Paths)](/images/soft7.png)
-
-## Associate Folders
-
-![Associate Folders](/images/soft8.webp)
-
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/fanchenio/DawnLauncher.svg)](https://starchart.cc/fanchenio/DawnLauncher)
-
-## License
-
-MIT License
+The code is licensed under MIT; see [LICENSE](LICENSE). The original copyright and license notice are retained; see [NOTICE.md](NOTICE.md) for provenance. Thanks to the Dawn Launcher author and contributors.

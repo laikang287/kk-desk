@@ -44,7 +44,7 @@ function createAddEditWindow(id: number | null, parentId: number | null) {
   // 创建窗口
   classificationAddEditWindow = global.classificationAddEditWindow =
     new BrowserWindow({
-      title: "kk Dawn Launcher",
+      title: "KK Desk",
       frame: false,
       parent: global.mainWindow,
       height: 174,
@@ -112,7 +112,7 @@ function createSetIconWindow(id: number) {
   // 创建窗口
   classificationSetIconWindow = global.classificationSetIconWindow =
     new BrowserWindow({
-      title: "kk Dawn Launcher",
+      title: "KK Desk",
       frame: false,
       parent: global.mainWindow,
       height: 500,
@@ -175,7 +175,7 @@ function createAssociateFolderWindow(id: number) {
   // 创建窗口
   classificationAssociateFolderWindow =
     global.classificationAssociateFolderWindow = new BrowserWindow({
-      title: "kk Dawn Launcher",
+      title: "KK Desk",
       frame: false,
       parent: global.mainWindow,
       height: 249,
@@ -243,7 +243,7 @@ function createAggregateWindow(id: number) {
   // 创建窗口
   classificationAggregateWindow = global.classificationAggregateWindow =
     new BrowserWindow({
-      title: "kk Dawn Launcher",
+      title: "KK Desk",
       frame: false,
       parent: global.mainWindow,
       height: 144,

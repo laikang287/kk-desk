@@ -34,6 +34,7 @@ import {
   getClassificationById,
 } from "../../classification/js";
 import { useMainStore } from "../../../store";
+import { getLocalizedClassificationName } from "../../../../commons/utils/classificationName";
 // pinia
 const store = useMainStore();
 // props
@@ -53,7 +54,7 @@ for (const [key, value] of store.itemMap.entries()) {
   if (classification && classification.name) {
     let group: SelectGroupOption = {
       type: "group",
-      label: classification.name,
+      label: getLocalizedClassificationName(classification, store.language) ?? "",
       key: classification.name,
     };
     let children: Array<SelectOption> = [];

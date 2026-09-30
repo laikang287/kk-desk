@@ -112,7 +112,7 @@ async function checkShortcutKeyDuplicate(
   for (const parent of classificationList) {
     // 父级分类
     if (parent.shortcutKey === shortcutKey) {
-      return store.language.shortcutKeyPrompt2(parent.name);
+      return store.language.shortcutKeyPrompt2(parent.name ?? "");
     }
     // 项目
     let itemList = itemMap.get(parent.id);

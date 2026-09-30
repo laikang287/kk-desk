@@ -1,14 +1,24 @@
 <template>
-  <NConfigProvider :theme-overrides="themeOverrides">
+  <NConfigProvider
+    :theme-overrides="themeOverrides"
+    :locale="componentLocale"
+    :date-locale="componentDateLocale"
+  >
     <NMessageProvider><router-view></router-view></NMessageProvider>
   </NConfigProvider>
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import {
   NConfigProvider,
   GlobalThemeOverrides,
   NMessageProvider,
+  zhCN,
+  zhTW,
+  enUS,
+  dateZhCN,
+  dateZhTW,
+  dateEnUS,
 } from "naive-ui";
 import { hexToRGBA } from "./utils/style";
 import { getSetting } from "../commons/utils/setting";
@@ -17,6 +27,20 @@ import { getLanguage } from "../commons/data/languages";
 import { getShortcutKey } from "./utils/common";
 // pinia
 const store = useMainStore();
+const componentLocale = computed(() =>
+  store.setting.general.language === "TraditionalChinese"
+    ? zhTW
+    : store.setting.general.language === "English"
+    ? enUS
+    : zhCN
+);
+const componentDateLocale = computed(() =>
+  store.setting.general.language === "TraditionalChinese"
+    ? dateZhTW
+    : store.setting.general.language === "English"
+    ? dateEnUS
+    : dateZhCN
+);
 // 查询设置
 (async () => {
   let setting = window.setting.select();
@@ -28,6 +52,12 @@ const store = useMainStore();
     store.setting = setting;
   }
   store.language = getLanguage(store.setting.general.language);
+  document.documentElement.lang =
+    store.setting.general.language === "TraditionalChinese"
+      ? "zh-TW"
+      : store.setting.general.language === "English"
+      ? "en"
+      : "zh-CN";
 })();
 // 主题
 let themeOverrides = ref<GlobalThemeOverrides | null>(null);

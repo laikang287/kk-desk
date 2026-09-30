@@ -88,6 +88,7 @@ import { getShortcutKey } from "../../utils/common";
 import { Classification } from "../../../types/classification";
 import { newClassification, convert } from "../../../commons/utils/common";
 import { useMainStore } from "../../store";
+import { getLocalizedClassificationName } from "../../../commons/utils/classificationName";
 // pinia
 const store = useMainStore();
 // form
@@ -114,6 +115,7 @@ if (id) {
     if (classification) {
       // 赋值
       form = reactive(newClassification(classification));
+      form.name = getLocalizedClassificationName(classification, store.language);
       oldShortcutKey = form.shortcutKey;
     }
   })();

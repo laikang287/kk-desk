@@ -14,7 +14,7 @@ function createBackupRestoreDataWindow() {
   closeWindow(backupRestoreDataWindow);
   // 创建窗口
   backupRestoreDataWindow = global.backupRestoreDataWindow = new BrowserWindow({
-    title: "kk Dawn Launcher",
+    title: "KK Desk",
     frame: false,
     parent: global.mainWindow,
     height: 108,

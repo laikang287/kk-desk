@@ -42,8 +42,6 @@ export interface General {
   switchEnglish: boolean;
   // 搜索显示/隐藏快捷键
   searchShowHideShortcutKey: string | null;
-  // 检查更新
-  checkUpdates: boolean;
 }
 
 // 外观

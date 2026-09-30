@@ -30,7 +30,7 @@ export default function () {
     try {
       let filePath = showSaveDialogSync("backupRestoreDataWindow", {
         defaultPath: "Data",
-        filters: [{ name: "DB", extensions: ["db"] }],
+        filters: [{ name: global.language.databaseFile, extensions: ["db"] }],
       });
       if (filePath && filePath.trim() !== "") {
         try {
@@ -55,7 +55,7 @@ export default function () {
   ipcMain.on("restoreData", () => {
     try {
       let filePathList = showOpenDialogSync("backupRestoreDataWindow", {
-        filters: [{ name: "Data", extensions: ["db", "json"] }],
+        filters: [{ name: global.language.dataFile, extensions: ["db", "json"] }],
       });
       if (filePathList && filePathList.length > 0) {
         let filePath = filePathList[0];
