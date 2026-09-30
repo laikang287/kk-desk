@@ -1550,7 +1550,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, nextTick, onMounted, onUnmounted, watch } from "vue";
+import { computed, ref, nextTick, onMounted, onUnmounted, watch } from "vue";
 import { Icon } from "@vicons/utils";
 import { CloseRound } from "@vicons/material";
 import {
@@ -1578,12 +1578,37 @@ import { checkShortcutKey as commonCheckShortcutKey } from "../../utils/shortcut
 import { getShortcutKey } from "../../utils/common";
 import { convert } from "../../../commons/utils/common";
 import { themeList } from "../../../commons/data/theme";
+import { resolveLanguage } from "../../../commons/data/languages";
 import { Setting, Theme, WebSearchSource } from "../../../types/setting";
 import { scrollToTop, getNewId } from "../../utils/common";
 import Desc from "../../components/Desc.vue";
 import { useMainStore } from "../../store";
 // pinia
 const store = useMainStore();
+let setting = ref<Setting>(convert(store.setting));
+const numberLocale = computed(() => {
+  const language = resolveLanguage(
+    setting.value.general.language,
+    navigator.language
+  );
+  const locales: Record<string, string> = {
+    SimplifiedChinese: "zh-CN",
+    TraditionalChinese: "zh-TW",
+    English: "en",
+    Japanese: "ja-JP",
+    Korean: "ko-KR",
+    French: "fr-FR",
+    German: "de-DE",
+    Spanish: "es-ES",
+    Russian: "ru-RU",
+  };
+  return locales[language] ?? "zh-CN";
+});
+function formatSettingNumber(value: number) {
+  return new Intl.NumberFormat(numberLocale.value, {
+    maximumFractionDigits: 2,
+  }).format(value);
+}
 // 创建滚动条
 let simpleBar: SimpleBar | null;
 function createSimpleBar() {
@@ -1593,7 +1618,6 @@ function createSimpleBar() {
   }
 }
 // setting
-let setting = ref<Setting>(convert(store.setting));
 let contextMenuModeOptions: Array<{ label: string; value: "desktop" | "dawn" }> = [
   { label: store.language.desktopContextMenu, value: "desktop" },
   { label: store.language.dawnContextMenu, value: "dawn" },
@@ -1728,99 +1752,21 @@ let classificationNameAlignOptions = ref([
   },
 ]);
 // 字体粗细
-let fontWeightOptions = ref([
-  {
-    label: "100",
-    value: 100,
-  },
-  {
-    label: "200",
-    value: 200,
-  },
-  {
-    label: "300",
-    value: 300,
-  },
-  {
-    label: "400",
-    value: 400,
-  },
-  {
-    label: "500",
-    value: 500,
-  },
-  {
-    label: "600",
-    value: 600,
-  },
-  {
-    label: "700",
-    value: 700,
-  },
-  {
-    label: "800",
-    value: 800,
-  },
-  {
-    label: "900",
-    value: 900,
-  },
-]);
+const fontWeightOptions = computed(() =>
+  [100, 200, 300, 400, 500, 600, 700, 800, 900].map((value) => ({
+    label: formatSettingNumber(value),
+    value,
+  }))
+);
 // 字体粗细
-let fontLineHeightOptions = ref([
-  {
-    label: "0",
-    value: 0,
-  },
-  {
-    label: "0.25",
-    value: 0.25,
-  },
-  {
-    label: "0.5",
-    value: 0.5,
-  },
-  {
-    label: "0.75",
-    value: 0.75,
-  },
-  {
-    label: "1",
-    value: 1,
-  },
-  {
-    label: "1.25",
-    value: 1.25,
-  },
-  {
-    label: "1.5",
-    value: 1.5,
-  },
-  {
-    label: "1.75",
-    value: 1.75,
-  },
-  {
-    label: "2",
-    value: 2,
-  },
-  {
-    label: "2.25",
-    value: 2.25,
-  },
-  {
-    label: "2.5",
-    value: 2.5,
-  },
-  {
-    label: "2.75",
-    value: 2.75,
-  },
-  {
-    label: "3",
-    value: 3,
-  },
-]);
+const fontLineHeightOptions = computed(() =>
+  [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3].map(
+    (value) => ({
+      label: formatSettingNumber(value),
+      value,
+    })
+  )
+);
 // 项目布局
 let itemLayoutOptions = ref([
   {
@@ -1852,16 +1798,9 @@ let itemIconSizeOptions = ref([
   },
 ]);
 // 项目名称行数
-let itemRowCountOptions = ref([
-  {
-    label: "1",
-    value: 1,
-  },
-  {
-    label: "2",
-    value: 2,
-  },
-]);
+const itemRowCountOptions = computed(() =>
+  [1, 2].map((value) => ({ label: formatSettingNumber(value), value }))
+);
 // 背景图模式
 let backgroundImageModeOptions = ref([
   {
