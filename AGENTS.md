@@ -1,8 +1,9 @@
 # AGENTS
 
 ## 版本与绿色版构建
-- 仅在本次改动需要发布新版本时，才将 `package.json` 中版本号的最后一项加 1。
-- 仅在修改项目版本号时，运行 TypeScript 检查并构建 Windows portable 绿色版版本包；纯文档修改（如 `AGENTS.md`、README、`docs/`、`NOTICE.md`）不需要递增版本号或构建版本包。
+- 仅在本次改动涉及代码时，才将 `package.json` 中版本号的最后一项加 1。
+- 纯文档修改（如 `AGENTS.md`、README、`docs/`、`NOTICE.md`）不需要递增版本号或构建版本包。
+- 仅在修改项目版本号时，运行 TypeScript 检查并构建 Windows portable 绿色版版本包；
 - 绿色版构建命令：`corepack yarn vue-tsc --noEmit`、`corepack yarn vite build`、`corepack yarn electron-builder --win portable`。
 
 ## 界面i18n
@@ -22,3 +23,6 @@
 
 ## Git 提交
 - 如果项目级 AGENTS.md 中没有说明 git 提交使用的语言，就默认使用中文。
+
+## core file
+- 如果程序崩溃，將core file存储在C盘下的files-vertical-tabs 目录下
