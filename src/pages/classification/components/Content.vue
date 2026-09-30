@@ -400,6 +400,13 @@ async function getClassificationList() {
     }
   }
   if (defaultFlag) {
+    const defaultClassification = store.classificationList[0];
+    if (
+      defaultClassification &&
+      hasChildClassification(defaultClassification.id)
+    ) {
+      classificationChildShowHiddenMap.value.set(defaultClassification.id, true);
+    }
     // 默认选中
     defaultSelected(null, null);
   }

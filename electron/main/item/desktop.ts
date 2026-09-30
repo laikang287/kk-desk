@@ -7,12 +7,25 @@ import { list as listClassifications, selectById as selectClassification } from 
 import { add, del, list, update } from "./data";
 
 const watchers = new Map<number, { handles: FSWatcher[]; debounce: NodeJS.Timeout | null; interval: NodeJS.Timeout | null }>();
-const virtualDesktopItems = [
+const virtualDesktopItems: Array<{
+  key: string;
+  target: string;
+  clsid: string;
+  visibilityClsids?: string[];
+  visibleByDefault: boolean;
+}> = [
   { key: "shell:MyComputerFolder", target: "shell:MyComputerFolder", clsid: "{20D04FE0-3AEA-1069-A2D8-08002B30309D}", visibleByDefault: false },
-  { key: "shell:Local Documents", target: "shell:Local Documents", clsid: "{59031A47-3F72-44A7-89C5-5595FE6B30EE}", visibleByDefault: false },
-  { key: "shell:ControlPanelFolder", target: "shell:ControlPanelFolder", clsid: "{26EE0668-A00A-44D7-9371-BEB064C98683}", visibleByDefault: false },
+  { key: "shell:UsersFilesFolder", target: "shell:UsersFilesFolder", clsid: "{59031A47-3F72-44A7-89C5-5595FE6B30EE}", visibleByDefault: false },
+  { key: "shell:ControlPanelFolder", target: "shell:ControlPanelFolder", clsid: "{26EE0668-A00A-44D7-9371-BEB064C98683}", visibilityClsids: ["{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}"], visibleByDefault: false },
   { key: "shell:NetworkPlacesFolder", target: "shell:NetworkPlacesFolder", clsid: "{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}", visibleByDefault: false },
   { key: "shell:RecycleBinFolder", target: "shell:RecycleBinFolder", clsid: "{645FF040-5081-101B-9F08-00AA002F954E}", visibleByDefault: true },
+];
+const priorityDesktopKeys = [
+  "shell:UsersFilesFolder",
+  "shell:MyComputerFolder",
+  "shell:NetworkPlacesFolder",
+  "shell:ControlPanelFolder",
+  "shell:RecycleBinFolder",
 ];
 
 function defaultChild(rootId: number) {
@@ -26,17 +39,19 @@ function desktopFolders() {
   return paths;
 }
 
-function isVirtualDesktopIconVisible(clsid: string, visibleByDefault: boolean) {
+function isVirtualDesktopIconVisible(clsids: string[], visibleByDefault: boolean) {
   let visibility: boolean | null = null;
   for (const key of [
     "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel",
     "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\ClassicStartMenu",
   ]) {
-    try {
-      const output = execFileSync("reg.exe", ["query", key, "/v", clsid], { encoding: "utf8", windowsHide: true });
-      const match = output.match(/REG_DWORD\s+0x([0-9a-f]+)/i);
-      if (match) visibility = parseInt(match[1], 16) === 0;
-    } catch {}
+    for (const clsid of clsids) {
+      try {
+        const output = execFileSync("reg.exe", ["query", key, "/v", clsid], { encoding: "utf8", windowsHide: true });
+        const match = output.match(/REG_DWORD\s+0x([0-9a-f]+)/i);
+        if (match) visibility = parseInt(match[1], 16) === 0;
+      } catch {}
+    }
   }
   return visibility ?? visibleByDefault;
 }
@@ -104,11 +119,12 @@ function collectDesktopItems(rootId: number) {
   }
 
   for (const virtual of virtualDesktopItems) {
-    if (!isVirtualDesktopIconVisible(virtual.clsid, virtual.visibleByDefault)) continue;
+    const visibilityClsids = [virtual.clsid, ...(virtual.visibilityClsids ?? [])];
+    if (!isVirtualDesktopIconVisible(visibilityClsids, virtual.visibleByDefault)) continue;
     const oldItem = oldByKey.get(virtual.key);
     const item = oldItem ?? newItem({ classificationId: unclassified.id, type: 3 });
     const languageKey = virtual.key === "shell:MyComputerFolder" ? "computer"
-      : virtual.key === "shell:Local Documents" ? "documents"
+      : virtual.key === "shell:UsersFilesFolder" ? "userFiles"
       : virtual.key === "shell:ControlPanelFolder" ? "controlPanel"
       : virtual.key === "shell:NetworkPlacesFolder" ? "network"
       : "recycleBin";
@@ -142,7 +158,14 @@ function reconcileDesktop(rootId: number) {
   const added: any[] = [];
   const changed: any[] = [];
 
-  for (const [key, item] of snapshot.found) {
+  const priorityByKey = new Map(priorityDesktopKeys.map((key, index) => [key, index]));
+  const desktopItems = Array.from(snapshot.found.entries()).sort(([leftKey], [rightKey]) => {
+    const leftPriority = priorityByKey.get(leftKey) ?? priorityDesktopKeys.length;
+    const rightPriority = priorityByKey.get(rightKey) ?? priorityDesktopKeys.length;
+    return leftPriority - rightPriority;
+  });
+
+  for (const [key, item] of desktopItems) {
     const oldItem = existingByKey.get(key);
     if (oldItem) {
       item.id = oldItem.id;
