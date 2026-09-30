@@ -7,12 +7,14 @@
 
 ## 界面i18n
 - 如果没有明确说明界面要 i18n，则不要进行 i18n。
-- 界面支持的语言包括：`en`、`zh-CN`、`zh-TW`、`ja`、`ko`、`fr`、`de`、`es`。
+- 界面支持的语言包括：`en`、`zh-CN`、`zh-TW`、`ja`、`ko`、`fr`、`de`、`es`、`ru`。
 - 修改范围：仅处理应用界面中面向用户的文本，以及界面使用的日期、数字等本地化内容；不翻译代码标识符、日志、开发者提示和上游原始代码/文档。新增或修改界面文案时，应同步维护所有支持语言。
 
 ## 文档i18n
-- 纳入翻译维护的文档：`README.md`、`README-ENGLISH.md`。
-- `README.md` 为中文主文档，手动编写和修改；`README-ENGLISH.md` 及后续新增的其它语言 README 均根据中文主文档翻译，不直接作为内容源维护。
+- 如果没有明确说明文档要 i18n，则不要进行 i18n
+- 有各种语言的README，分别支持`en`、`zh-CN`、`zh-TW`、`ja`、`ko`、`fr`、`de`、`es`、`ru`
+- `README.zh-CN.md`、`README.md`，这两份文档在项目根目录，其它语言的README文档在docs
+- `README.zh-CN.md` 为主文档，手动编写和修改，如果明确说明文档要支持i18n时，则使用AI翻译将README.zh-CN.md翻译为其它语言
 - `upstream/` 下的文档属于上游原始文档，`NOTICE.md`、`LICENSE` 属于来源/许可文件，均不纳入本项目文档 i18n。
 
 ## Git 提交
