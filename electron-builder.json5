@@ -16,7 +16,7 @@
   files: ["dist", "dist-electron", "native", "!node_modules/**/*"],
   win: {
     appId: "com.laikang287.kklauncher",
-    executableName: "KK Desk",
+    executableName: "KK-Desk",
     target: [
       {
         target: "nsis",
@@ -37,6 +37,7 @@
   portable: {
     artifactName: "${productName}-${version}-${arch}-portable.${ext}",
   },
+  afterAllArtifactBuild: "scripts/after-build.js",
   extraResources: [
     { from: "LICENSE", to: "LICENSE" },
     { from: "NOTICE.md", to: "NOTICE.md" },
