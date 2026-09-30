@@ -6,7 +6,7 @@ import { deleteExtname, newItem } from "../../../commons/utils/common";
 import { list as listClassifications, selectById as selectClassification } from "../classification/data";
 import { add, del, list, update } from "./data";
 
-const watchers = new Map<number, { handles: FSWatcher[]; debounce: NodeJS.Timeout | null; interval: NodeJS.Timeout | null }>();
+const watchers = new Map<number, { handles: FSWatcher[]; debounce: NodeJS.Timeout | null }>();
 const virtualDesktopItems: Array<{
   key: string;
   target: string;
@@ -107,7 +107,11 @@ function collectDesktopItems(rootId: number) {
         item.type = stats.isDirectory() ? 1 : 0;
         item.data.target = target;
         item.data.params = params;
-        item.data.icon = safeFileIcon(sourcePath, target);
+        // Shell icon extraction is synchronous and expensive. Reuse the stored
+        // icon while the source path and resolved shortcut target are unchanged.
+        if (!oldItem || oldItem.data.desktopSourcePath !== sourcePath || oldItem.data.target !== target) {
+          item.data.icon = safeFileIcon(sourcePath, target);
+        }
         item.data.desktopKey = key;
         item.data.desktopSourcePath = sourcePath;
         found.set(key, item);
@@ -133,7 +137,7 @@ function collectDesktopItems(rootId: number) {
     item.data.target = virtual.target;
     item.data.desktopKey = virtual.key;
     item.data.desktopSourcePath = virtual.target;
-    item.data.icon = safeFileIcon(virtual.target);
+    if (!oldItem) item.data.icon = safeFileIcon(virtual.target);
     found.set(virtual.key, item);
   }
   return { existing, found };
@@ -204,7 +208,7 @@ function refreshDesktopAssociation(rootId: number) {
 
 function startDesktopAssociation(rootId: number) {
   stopDesktopAssociation(rootId);
-  const state = { handles: [] as FSWatcher[], debounce: null as NodeJS.Timeout | null, interval: null as NodeJS.Timeout | null };
+  const state = { handles: [] as FSWatcher[], debounce: null as NodeJS.Timeout | null };
   const schedule = () => {
     if (state.debounce) clearTimeout(state.debounce);
     state.debounce = setTimeout(() => reconcileDesktop(rootId), 500);
@@ -214,8 +218,6 @@ function startDesktopAssociation(rootId: number) {
       state.handles.push(watch(folder, schedule));
     } catch {}
   }
-  // Polling also catches shell namespace changes that do not produce filesystem events.
-  state.interval = setInterval(() => reconcileDesktop(rootId), 5000);
   watchers.set(rootId, state);
   reconcileDesktop(rootId);
 }
@@ -225,7 +227,6 @@ function stopDesktopAssociation(rootId: number) {
   if (!state) return;
   for (const handle of state.handles) handle.close();
   if (state.debounce) clearTimeout(state.debounce);
-  if (state.interval) clearInterval(state.interval);
   watchers.delete(rootId);
 }
 

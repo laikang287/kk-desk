@@ -39,6 +39,7 @@ import {
   updateOrder,
 } from "./data";
 import { Item } from "../../../types/item";
+import { refreshDesktopAssociation } from "./desktop";
 import { getFileExtname, isAbsolutePath } from "../../../commons/utils/common";
 import {
   list as selectClassificationList,
@@ -491,6 +492,12 @@ export default function () {
           );
         }
       } else {
+        if (classification.type === 3) {
+          menuList.push(new MenuItem({
+            label: global.language.refreshDesktop,
+            click: () => refreshDesktopAssociation(classification.id),
+          }));
+        }
         // 尝试查询分类下有没有子分类
         let classificationList = selectClassificationList(classificationId);
         // 添加项目选项
