@@ -34,8 +34,8 @@ function createMainWindow() {
   // 创建窗口
   mainWindow = global.mainWindow = new BrowserWindow({
     title: "KK Desk",
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 900,
     frame: false,
     show: false,
     maximizable: false,
