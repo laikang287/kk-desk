@@ -1670,6 +1670,7 @@ let menuList = [
 ];
 // 语言
 let languageOptions = ref([
+  { label: store.language.autoLanguage, value: "auto" },
   {
     label: store.language.simplifiedChinese,
     value: "SimplifiedChinese",
@@ -1682,6 +1683,12 @@ let languageOptions = ref([
     label: store.language.english,
     value: "English",
   },
+  { label: "日本語", value: "Japanese" },
+  { label: "한국어", value: "Korean" },
+  { label: "Français", value: "French" },
+  { label: "Deutsch", value: "German" },
+  { label: "Español", value: "Spanish" },
+  { label: "Русский", value: "Russian" },
 ]);
 // 分类布局
 let classificationLayoutOptions = ref([

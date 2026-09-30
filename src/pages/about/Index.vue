@@ -33,7 +33,7 @@
         draggable="false"
       />
       <p class="mt-2">KK Desk {{ version }}</p>
-      <p class="mt-2">Copyright © 2026 KK Desk contributors</p>
+      <p class="mt-2">{{ store.language.copyrightNotice }}</p>
       <p class="mt-2">{{ store.language.unofficialFork }}</p>
       <p class="mt-2">{{ store.language.upstreamCopyright }}</p>
       <p class="mt-2">

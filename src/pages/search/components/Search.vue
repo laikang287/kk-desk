@@ -218,7 +218,7 @@ function getPlaceholder() {
   ) {
     text = webSearchSource.value.description.trim();
   } else if (mode.value === "commandLine") {
-    text = "Command Line";
+    text = store.language.commandLine;
   }
   return text;
 }

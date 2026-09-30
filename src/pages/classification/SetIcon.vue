@@ -66,7 +66,7 @@
             @click="setIcon(e.value)"
           >
             <span
-              :title="e.name"
+              :title="getEmojiName(e.value, e.name)"
               class="w-[36px] h-[36px] flex items-center justify-center"
               >{{ e.value }}</span
             >
@@ -94,6 +94,7 @@ import {
   traditionalChineseEmoji,
   englishEmoji,
 } from "./js/emoji";
+import { resolveLanguage } from "../../../commons/data/languages";
 import { useMainStore } from "../../store";
 // pinia
 const store = useMainStore();
@@ -103,12 +104,43 @@ const queryParams = new URLSearchParams(window.location.search);
 let id = parseInt(queryParams.get("id")!);
 // emoji
 let emoji: any = [];
-if (store.setting.general.language === "SimplifiedChinese") {
+const language = resolveLanguage(store.setting.general.language, navigator.language);
+const emojiNameTranslations = ref<Record<string, string>>({});
+const emojiNameLoaders: Record<string, () => Promise<{ default: Record<string, string> }>> = {
+  Japanese: () => import("../../../commons/data/locales/emoji/ja.json"),
+  Korean: () => import("../../../commons/data/locales/emoji/ko.json"),
+  French: () => import("../../../commons/data/locales/emoji/fr.json"),
+  German: () => import("../../../commons/data/locales/emoji/de.json"),
+  Spanish: () => import("../../../commons/data/locales/emoji/es.json"),
+  Russian: () => import("../../../commons/data/locales/emoji/ru.json"),
+};
+if (emojiNameLoaders[language]) {
+  void emojiNameLoaders[language]().then(({ default: names }) => {
+    emojiNameTranslations.value = names;
+  });
+}
+if (language === "SimplifiedChinese") {
   emoji = simplifiedChineseEmoji;
-} else if (store.setting.general.language === "TraditionalChinese") {
+} else if (language === "TraditionalChinese") {
   emoji = traditionalChineseEmoji;
-} else if (store.setting.general.language === "English") {
+} else if (language === "English") {
   emoji = englishEmoji;
+} else {
+  const categoryLabels: Record<string, Record<string, string>> = {
+    Japanese: { Smileys: "顔文字と感情", People: "人", Animals: "動物", Food: "食べ物", Travel: "旅行と場所", Activities: "アクティビティ", Objects: "物", Symbols: "記号", Flags: "旗" },
+    Korean: { Smileys: "이모티콘 및 감정", People: "사람", Animals: "동물", Food: "음식", Travel: "여행 및 장소", Activities: "활동", Objects: "사물", Symbols: "기호", Flags: "깃발" },
+    French: { Smileys: "Émoticônes et émotions", People: "Personnes", Animals: "Animaux", Food: "Nourriture", Travel: "Voyages et lieux", Activities: "Activités", Objects: "Objets", Symbols: "Symboles", Flags: "Drapeaux" },
+    German: { Smileys: "Smileys und Emotionen", People: "Menschen", Animals: "Tiere", Food: "Essen", Travel: "Reisen und Orte", Activities: "Aktivitäten", Objects: "Objekte", Symbols: "Symbole", Flags: "Flaggen" },
+    Spanish: { Smileys: "Caras y emociones", People: "Personas", Animals: "Animales", Food: "Comida", Travel: "Viajes y lugares", Activities: "Actividades", Objects: "Objetos", Symbols: "Símbolos", Flags: "Banderas" },
+    Russian: { Smileys: "Эмоции и смайлы", People: "Люди", Animals: "Животные", Food: "Еда", Travel: "Путешествия и места", Activities: "Занятия", Objects: "Предметы", Symbols: "Символы", Flags: "Флаги" },
+  };
+  const labels = categoryLabels[language] ?? {};
+  emoji = Object.fromEntries(
+    Object.entries(englishEmoji).map(([category, values]) => [
+      labels[category] ?? category,
+      values,
+    ])
+  );
 }
 // 选中
 let selected = ref(Object.keys(emoji)[0]);
@@ -122,6 +154,10 @@ async function setIcon(icon: string) {
     });
   }
   close();
+}
+function getEmojiName(value: string, fallback: string) {
+  const key = value.replace(/[\uFE0E\uFE0F]/g, "");
+  return emojiNameTranslations.value[key] ?? fallback;
 }
 // 加载完dom后再显示页面
 nextTick(() => {

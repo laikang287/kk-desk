@@ -1,7 +1,7 @@
 import type { Classification } from "../../types/classification";
 import { getLanguage, type Language } from "../data/languages";
 
-const languageNames = ["SimplifiedChinese", "TraditionalChinese", "English"];
+const languageNames = ["SimplifiedChinese", "TraditionalChinese", "English", "Japanese", "Korean", "French", "German", "Spanish", "Russian"];
 const desktopNames = new Set(languageNames.map((name) => getLanguage(name).desktopClassification));
 const defaultNames = new Set(languageNames.map((name) => getLanguage(name).defaultClassification));
 

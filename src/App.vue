@@ -19,27 +19,24 @@ import {
   dateZhCN,
   dateZhTW,
   dateEnUS,
+  jaJP, dateJaJP, koKR, dateKoKR, frFR, dateFrFR, deDE, dateDeDE,
+  esAR, dateEsAR, ruRU, dateRuRU,
 } from "naive-ui";
 import { hexToRGBA } from "./utils/style";
 import { getSetting } from "../commons/utils/setting";
 import { useMainStore } from "./store";
-import { getLanguage } from "../commons/data/languages";
+import { getLanguage, resolveLanguage } from "../commons/data/languages";
 import { getShortcutKey } from "./utils/common";
 // pinia
 const store = useMainStore();
+const currentLanguage = computed(() => resolveLanguage(store.setting.general.language, navigator.language));
 const componentLocale = computed(() =>
-  store.setting.general.language === "TraditionalChinese"
-    ? zhTW
-    : store.setting.general.language === "English"
-    ? enUS
-    : zhCN
+  ({ TraditionalChinese: zhTW, English: enUS, Japanese: jaJP, Korean: koKR,
+    French: frFR, German: deDE, Spanish: esAR, Russian: ruRU } as any)[currentLanguage.value] ?? zhCN
 );
 const componentDateLocale = computed(() =>
-  store.setting.general.language === "TraditionalChinese"
-    ? dateZhTW
-    : store.setting.general.language === "English"
-    ? dateEnUS
-    : dateZhCN
+  ({ TraditionalChinese: dateZhTW, English: dateEnUS, Japanese: dateJaJP, Korean: dateKoKR,
+    French: dateFrFR, German: dateDeDE, Spanish: dateEsAR, Russian: dateRuRU } as any)[currentLanguage.value] ?? dateZhCN
 );
 // 查询设置
 (async () => {
@@ -51,13 +48,10 @@ const componentDateLocale = computed(() =>
     window.setting.add(setting);
     store.setting = setting;
   }
-  store.language = getLanguage(store.setting.general.language);
-  document.documentElement.lang =
-    store.setting.general.language === "TraditionalChinese"
-      ? "zh-TW"
-      : store.setting.general.language === "English"
-      ? "en"
-      : "zh-CN";
+  store.language = getLanguage(resolveLanguage(store.setting.general.language, navigator.language));
+  document.documentElement.lang = ({ SimplifiedChinese: "zh-CN", TraditionalChinese: "zh-TW",
+    English: "en", Japanese: "ja", Korean: "ko", French: "fr", German: "de",
+    Spanish: "es", Russian: "ru" } as any)[currentLanguage.value] ?? "zh-CN";
 })();
 // 主题
 let themeOverrides = ref<GlobalThemeOverrides | null>(null);
@@ -366,6 +360,10 @@ onMounted(() => {
   // 监听更新项目
   onUpdateSettingUnListen = window.setting.onUpdate((data) => {
     store.setting = data;
+    store.language = getLanguage(resolveLanguage(data.general.language, navigator.language));
+    document.documentElement.lang = ({ SimplifiedChinese: "zh-CN", TraditionalChinese: "zh-TW",
+      English: "en", Japanese: "ja", Korean: "ko", French: "fr", German: "de",
+      Spanish: "es", Russian: "ru" } as any)[resolveLanguage(data.general.language, navigator.language)] ?? "zh-CN";
   });
 });
 // unmounted

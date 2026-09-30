@@ -61,6 +61,7 @@ export interface Language {
   color: string;
   columnNumber: string;
   commandLine: string;
+  copyrightNotice: string;
   commandLinePrompt1: string;
   commandPrompt: string;
   dataFile: string;
@@ -161,6 +162,7 @@ export interface Language {
   keyword: string;
   keywordSpace: string;
   language: string;
+  autoLanguage: string;
   large: string;
   layout: string;
   layoutListModeTakeEffect: string;
@@ -312,3 +314,4 @@ export interface Language {
 }
 
 export function getLanguage(language: string | null): Language;
+export function resolveLanguage(language: string | null, locale?: string | null): string;

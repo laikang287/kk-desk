@@ -1,3 +1,10 @@
+import japaneseLocale from "./locales/ja.json";
+import koreanLocale from "./locales/ko.json";
+import frenchLocale from "./locales/fr.json";
+import germanLocale from "./locales/de.json";
+import spanishLocale from "./locales/es.json";
+import russianLocale from "./locales/ru.json";
+
 // 简体中文
 let simplifiedChinese = {
   about: "关于",
@@ -68,6 +75,7 @@ let simplifiedChinese = {
   color: "颜色",
   columnNumber: "列数",
   commandLine: "命令行",
+  copyrightNotice: "版权所有 © 2026 KK Desk 贡献者",
   commandLinePrompt1: '在"快速搜索"或"搜索"中使用"> + 空格"进入命令行模式。',
   commandPrompt: "命令提示符",
   dataFile: "数据文件",
@@ -168,6 +176,7 @@ let simplifiedChinese = {
   keyword: "关键字",
   keywordSpace: "关键字 + 空格",
   language: "语言",
+  autoLanguage: "自动（系统语言）",
   large: "大",
   layout: "布局",
   layoutListModeTakeEffect: '布局为"列表"模式下生效。',
@@ -400,6 +409,7 @@ let traditionalChinese: Language = {
   color: "顏色",
   columnNumber: "列數",
   commandLine: "命令行",
+  copyrightNotice: "版權所有 © 2026 KK Desk 貢獻者",
   commandLinePrompt1: '在"快速搜索"或"搜索"中使用"> + 空格"進入命令行模式。',
   commandPrompt: "命令提示符",
   dataFile: "資料檔案",
@@ -500,6 +510,7 @@ let traditionalChinese: Language = {
   keyword: "關鍵字",
   keywordSpace: "關鍵字 + 空格",
   language: "語言",
+  autoLanguage: "自動（系統語言）",
   large: "大",
   layout: "布局",
   layoutListModeTakeEffect: '布局為"列表"模式下生效。',
@@ -735,6 +746,7 @@ let english: Language = {
   color: "Color",
   columnNumber: "Column Number",
   commandLine: "Command Line",
+  copyrightNotice: "Copyright © 2026 KK Desk contributors",
   commandLinePrompt1:
     'Use "> + Space" in "Quick Search" or "Search" to enter command-line mode.',
   commandPrompt: "Command Prompt",
@@ -838,6 +850,7 @@ let english: Language = {
   keyword: "Keyword",
   keywordSpace: "Leyword + Space",
   language: "Language",
+  autoLanguage: "Auto (system language)",
   large: "Large",
   layout: "Layout",
   layoutListModeTakeEffect: 'Effective when the layout is in "list" mode.',
@@ -1013,11 +1026,60 @@ let english: Language = {
   zoom: "Zoom",
 };
 
+// All static UI labels are translated in locale JSON files. Dynamic messages
+// stay here so their interpolated values remain intact.
+const additionalLanguages: Record<string, Partial<Language>> = {
+  Japanese: {
+    ...(japaneseLocale as Partial<Language>),
+    shortcutKeyPrompt2: (value) => `「${value}」分類のショートカットキーと競合しています。再設定してください。`,
+    shortcutKeyPrompt3: (value) => `「${value}」項目のショートカットキーと競合しています。再設定してください。`,
+  },
+  Korean: {
+    ...(koreanLocale as Partial<Language>),
+    shortcutKeyPrompt2: (value) => `“${value}” 분류 바로 가기 키와 충돌합니다. 다시 설정하세요.`,
+    shortcutKeyPrompt3: (value) => `“${value}” 항목 바로 가기 키와 충돌합니다. 다시 설정하세요.`,
+  },
+  French: {
+    ...(frenchLocale as Partial<Language>),
+    shortcutKeyPrompt2: (value) => `Conflit avec le raccourci clavier de la catégorie « ${value} ». Veuillez le modifier.`,
+    shortcutKeyPrompt3: (value) => `Conflit avec le raccourci clavier de l’élément « ${value} ». Veuillez le modifier.`,
+  },
+  German: {
+    ...(germanLocale as Partial<Language>),
+    shortcutKeyPrompt2: (value) => `Konflikt mit dem Tastenkürzel der Kategorie „${value}“. Bitte neu festlegen.`,
+    shortcutKeyPrompt3: (value) => `Konflikt mit dem Tastenkürzel des Eintrags „${value}“. Bitte neu festlegen.`,
+  },
+  Spanish: {
+    ...(spanishLocale as Partial<Language>),
+    shortcutKeyPrompt2: (value) => `Conflicto con el atajo de teclado de la categoría «${value}». Cámbialo.`,
+    shortcutKeyPrompt3: (value) => `Conflicto con el atajo de teclado del elemento «${value}». Cámbialo.`,
+  },
+  Russian: {
+    ...(russianLocale as Partial<Language>),
+    shortcutKeyPrompt2: (value) => `Сочетание клавиш конфликтует с сочетанием категории «${value}». Настройте его заново.`,
+    shortcutKeyPrompt3: (value) => `Сочетание клавиш конфликтует с сочетанием элемента «${value}». Настройте его заново.`,
+  },
+};
+
 /**
  * 获取语言
  * @param language
  * @returns
  */
+function resolveLanguage(language: string | null, locale?: string | null): string {
+  if (language && language !== "auto") return language;
+  const systemLocale = (locale || "").toLowerCase();
+  if (/^zh-(tw|hk|mo)/.test(systemLocale)) return "TraditionalChinese";
+  if (systemLocale === "zh" || systemLocale.startsWith("zh-")) return "SimplifiedChinese";
+  if (systemLocale.startsWith("ja")) return "Japanese";
+  if (systemLocale.startsWith("ko")) return "Korean";
+  if (systemLocale.startsWith("fr")) return "French";
+  if (systemLocale.startsWith("de")) return "German";
+  if (systemLocale.startsWith("es")) return "Spanish";
+  if (systemLocale.startsWith("ru")) return "Russian";
+  return "English";
+}
+
 function getLanguage(language: string | null): Language {
   if (language === "SimplifiedChinese") {
     return simplifiedChinese;
@@ -1026,8 +1088,11 @@ function getLanguage(language: string | null): Language {
   } else if (language === "English") {
     return english;
   }
+  if (language && additionalLanguages[language]) {
+    return { ...english, ...additionalLanguages[language] } as Language;
+  }
   return simplifiedChinese;
 }
 
-export { getLanguage };
+export { getLanguage, resolveLanguage };
 export type { Language };

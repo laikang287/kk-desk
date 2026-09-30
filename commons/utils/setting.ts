@@ -25,7 +25,7 @@ function getGeneral({
   startup = false,
   startupTray = false,
   showHideShortcutKey = null,
-  language = "SimplifiedChinese",
+  language = "auto",
   alwaysTop = false,
   edgeAdsorb = true,
   edgeAutoHide = false,

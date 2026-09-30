@@ -41,5 +41,6 @@
   extraResources: [
     { from: "LICENSE", to: "LICENSE" },
     { from: "NOTICE.md", to: "NOTICE.md" },
+    { from: "commons/data/locales/emoji/LICENSE.txt", to: "UNICODE-CLDR-LICENSE.txt" },
   ],
 }

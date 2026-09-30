@@ -17,7 +17,7 @@ import searchIpcEvent from "./search/ipcEvent";
 import { createMainWindow } from "./main";
 import { closeAllChildProcess } from "./commons";
 import { createQuickSearchWindow } from "./search";
-import { getLanguage } from "../../commons/data/languages";
+import { getLanguage, resolveLanguage } from "../../commons/data/languages";
 import aboutIpcEvent from "./about/ipcEvent";
 import dataIpcEvent from "./data/ipcEvent";
 
@@ -71,23 +71,9 @@ app.whenReady().then(() => {
     }
     // addon
     global.addon = require("../../native/addon.node");
-    if (global.first) {
-      // 首次添加，判断系统语言
-      const locale = app.getLocale().toLowerCase();
-      if (/^zh-(tw|hk|mo)/.test(locale)) {
-        global.setting.general.language = "TraditionalChinese";
-      } else if (locale === "zh" || locale.startsWith("zh-")) {
-        // 简体中文
-        global.setting.general.language = "SimplifiedChinese";
-      } else {
-        // 英文
-        global.setting.general.language = "English";
-      }
-      // 修改
-      updateSetting(global.setting);
-    }
+    if (global.first) updateSetting(global.setting);
     // 获取语言
-    global.language = getLanguage(global.setting.general.language);
+    global.language = getLanguage(resolveLanguage(global.setting.general.language, app.getLocale()));
     // 禁用debugtron
     for (let i = 0; i < process.argv.length; i++) {
       const arg = process.argv[i];
