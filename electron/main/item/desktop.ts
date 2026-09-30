@@ -153,10 +153,13 @@ function safeFileIcon(sourcePath: string, target?: string) {
 }
 
 function reconcileDesktop(rootId: number) {
+  const startedAt = Date.now();
   const root = selectClassification(rootId);
   if (!root || root.type !== 3) return;
+  const scanStartedAt = Date.now();
   const snapshot = collectDesktopItems(rootId);
   if (!snapshot) return;
+  const scanDuration = Date.now() - scanStartedAt;
   const existingByKey = new Map(snapshot.existing.map((item) => [item.data.desktopKey!, item]));
   const removedIds: number[] = [];
   const added: any[] = [];
@@ -200,6 +203,9 @@ function reconcileDesktop(rootId: number) {
     for (const item of changed) global.mainWindow.webContents.send("onUpdateItem", { item });
     if (removedIds.length) global.mainWindow.webContents.send("onDeleteItem", removedIds);
   }
+  console.info(
+    `[desktop] Reconciled root=${rootId}: scanned=${snapshot.found.size}, added=${added.length}, changed=${changed.length}, removed=${removedIds.length}, scan=${scanDuration}ms, total=${Date.now() - startedAt}ms`
+  );
 }
 
 function refreshDesktopAssociation(rootId: number) {
@@ -209,9 +215,16 @@ function refreshDesktopAssociation(rootId: number) {
 function startDesktopAssociation(rootId: number) {
   stopDesktopAssociation(rootId);
   const state = { handles: [] as FSWatcher[], debounce: null as NodeJS.Timeout | null };
+  let pendingEvents = 0;
   const schedule = () => {
+    pendingEvents++;
     if (state.debounce) clearTimeout(state.debounce);
-    state.debounce = setTimeout(() => reconcileDesktop(rootId), 500);
+    state.debounce = setTimeout(() => {
+      const eventCount = pendingEvents;
+      pendingEvents = 0;
+      console.info(`[desktop] Filesystem changes root=${rootId}: events=${eventCount}; reconciling`);
+      reconcileDesktop(rootId);
+    }, 500);
   };
   for (const folder of desktopFolders()) {
     try {
