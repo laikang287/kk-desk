@@ -11,6 +11,7 @@ FONT = Path("C:/Windows/Fonts/arialbd.ttf")
 NAVY = (15, 23, 48, 255)
 ORANGE = (255, 155, 65, 255)
 WHITE = (255, 255, 255, 255)
+LIGHT = (245, 247, 250, 255)
 
 
 def icon(size: int) -> Image.Image:
@@ -20,11 +21,18 @@ def icon(size: int) -> Image.Image:
     draw.rounded_rectangle(
         (margin, margin, size - margin, size - margin),
         radius=round(size * 0.23),
-        fill=NAVY,
+        fill=LIGHT,
     )
-    # Keep the initials readable and give the launch arrow its own space on the right.
-    font = ImageFont.truetype(str(FONT), round(size * 0.40))
-    draw.text((size * 0.37, size * 0.51), "kk", font=font, fill=WHITE, anchor="mm")
+    # App tiles make the mark read as a launcher; reserve the right side for the arrow.
+    tile = round(size * 0.16)
+    tile_radius = round(size * 0.035)
+    for x, y in [(0.20, 0.27), (0.42, 0.27), (0.20, 0.49), (0.42, 0.49)]:
+        left, top = round(size * x), round(size * y)
+        draw.rounded_rectangle(
+            (left, top, left + tile, top + tile),
+            radius=tile_radius,
+            fill=NAVY,
+        )
 
     scale = lambda x, y: (round(size * x), round(size * y))
     shaft = round(size * 0.085)
@@ -44,7 +52,7 @@ def main() -> None:
 
     wordmark = Image.new("RGBA", (960, 300))
     draw = ImageDraw.Draw(wordmark)
-    draw.rounded_rectangle((0, 0, 959, 299), radius=70, fill=NAVY)
+    draw.rounded_rectangle((0, 0, 959, 299), radius=70, fill=LIGHT)
     emblem = icon(228)
     wordmark.alpha_composite(emblem, (36, 36))
     font_size = 136
@@ -53,7 +61,7 @@ def main() -> None:
         if draw.textlength("Desk", font=font) <= 650:
             break
         font_size -= 1
-    draw.text((278, 149), "Desk", font=font, fill=WHITE, anchor="lm")
+    draw.text((278, 149), "Desk", font=font, fill=NAVY, anchor="lm")
     wordmark.save(PUBLIC / "logo-transparent.png", optimize=True)
 
 
