@@ -24,5 +24,4 @@
 ## Git 提交
 - 如果项目级 AGENTS.md 中没有说明 git 提交使用的语言，就默认使用中文。
 
-## core file
-- 如果程序崩溃，將core file存储在C盘下的files-vertical-tabs 目录下
+
